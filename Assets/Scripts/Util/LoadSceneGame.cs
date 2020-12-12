@@ -5,7 +5,8 @@ public class LoadSceneGame : MonoBehaviour
 {
     public int indexScene;
 
-    void OnEnable(){
+    private void OnEnable()
+    {
         SceneManager.LoadScene(indexScene);
     }
 }
