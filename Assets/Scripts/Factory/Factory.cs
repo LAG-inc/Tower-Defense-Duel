@@ -8,7 +8,7 @@ public class Factory : MonoBehaviour
     {
         Debug.Log($"Instanciar: {unit.name}");
         _unitToGenerate = unit;
-        FactoryTracker.PlaceUnit();
+        FactoryTracker.SetCanPlaceUnit();
     }
 
     public void GenerateUnit(Vector3 location)

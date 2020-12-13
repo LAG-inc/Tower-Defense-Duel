@@ -11,10 +11,10 @@ public class FactoryTracker : MonoBehaviour
     void Update()
     {
         if (_canPlaceUnit)
-            GenerateUnit();
+            PlaceUnit();
     }
 
-    private void GenerateUnit()
+    private void PlaceUnit()
     {
         if (Input.GetButtonDown("Action"))
         {
@@ -33,7 +33,7 @@ public class FactoryTracker : MonoBehaviour
         _currentInteractive = interactive;
     }
 
-    public static void PlaceUnit(bool canPlaceUnit=true)
+    public static void SetCanPlaceUnit(bool canPlaceUnit=true)
     {
         _canPlaceUnit = canPlaceUnit;
     }
