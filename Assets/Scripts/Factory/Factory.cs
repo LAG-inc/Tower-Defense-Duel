@@ -6,14 +6,13 @@ public class Factory : MonoBehaviour
 
     public void PrepareUnitGeneration(GameObject unit)
     {
-        Debug.Log($"Instanciar: {unit.name}");
         _unitToGenerate = unit;
-        FactoryTracker.PlaceUnit();
+        FactoryTracker.SetCanPlaceUnit();
     }
 
-    public void GenerateUnit(Vector3 location)
+    public void GenerateUnit(Vector2 location)
     {
-        var position = new Vector2(location.x, location.y);
-        Instantiate(_unitToGenerate, position, Quaternion.identity);
+        if (_unitToGenerate)
+            Instantiate(_unitToGenerate, location, Quaternion.identity);
     }
 }

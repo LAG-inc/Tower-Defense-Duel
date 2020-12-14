@@ -2,25 +2,27 @@
 
 public class FactoryTracker : MonoBehaviour
 {
-    [SerializeField, Tooltip("Cámara principal")]
-    private Camera gameCamera;
     private static Factory _currentFactory;
     private static FactoryInteractive _currentInteractive;
     private static bool _canPlaceUnit;
 
-    void Update()
+    void Start()
     {
-        if (_canPlaceUnit)
-            GenerateUnit();
+        Tile.OnMouseClick += () => PlaceUnit();
     }
 
-    private void GenerateUnit()
+    private void PlaceUnit()
     {
-        if (Input.GetButtonDown("Action"))
+        if (!_canPlaceUnit) return;
+        RaycastHit2D hit = Physics2D.Raycast(
+            Camera.main.ScreenToWorldPoint(Input.mousePosition),
+            Vector2.zero,
+            10.0f,
+            LayerMask.GetMask("Tile"));
+        if (hit)
         {
-            Vector3 screenPos = Input.mousePosition;
-            Vector3 worldPos = gameCamera.ScreenToWorldPoint(screenPos);
-            _currentFactory.GenerateUnit(worldPos);
+            // TODO: pass game object to have the reference
+            _currentFactory?.GenerateUnit(hit.collider.transform.position);
             _canPlaceUnit = false;
         }
     }
@@ -33,8 +35,13 @@ public class FactoryTracker : MonoBehaviour
         _currentInteractive = interactive;
     }
 
-    public static void PlaceUnit(bool canPlaceUnit=true)
+    public static void SetCanPlaceUnit(bool canPlaceUnit=true)
     {
         _canPlaceUnit = canPlaceUnit;
+    }
+
+    public static bool GetCanPlaceUnit()
+    {
+        return _canPlaceUnit;
     }
 }
