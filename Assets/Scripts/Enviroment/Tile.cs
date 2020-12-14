@@ -8,9 +8,11 @@ public class Tile : MonoBehaviour
     private SpriteRenderer _sprite;
     private Color _initialColor;
     private Color _onMouseOverColor;
+
     private static bool _isOverTile;
+
     // Indicates if the tile is empty or not
-    private bool _isEmpty =true;
+    private bool _isEmpty = true;
 
     private void Awake()
     {

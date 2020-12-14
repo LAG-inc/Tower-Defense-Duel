@@ -4,14 +4,19 @@ public class FactoryInteractive : MonoBehaviour
 {
     [SerializeField, Tooltip("Referencia a la fabrica del mismo prefab")]
     private Factory factory;
+
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Canvas ui;
 
     [SerializeField] private Color focusColor;
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
-        GainFocus();
+        //lose focus when click again in the same factory 
+        if (ui.gameObject.activeSelf)
+            LoseFocus();
+        else
+            GainFocus();
     }
 
     public void LoseFocus()
