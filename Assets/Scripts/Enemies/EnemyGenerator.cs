@@ -14,7 +14,7 @@ public class EnemyGenerator : MonoBehaviour
     private List<GameObject> enemies = new List<GameObject>();
 
 
-    [SerializeField] private int enemiesPerPhase;
+    private static int _enemiesPerPhase;
 
     //A better name for _currentEnemiesPerPhase I think
     private int _enemiesSpawned;
@@ -31,12 +31,13 @@ public class EnemyGenerator : MonoBehaviour
     {
         //return if pause
 
-        if (_enemiesSpawned >= enemiesPerPhase)
+        if (_enemiesSpawned >= _enemiesPerPhase)
         {
             return;
         }
 
         _currentSpawnTime += Time.deltaTime;
+
         if (!(_currentSpawnTime >= spawnRate)) return;
         _currentSpawnTime = 0;
         CreateEnemy();
@@ -48,5 +49,10 @@ public class EnemyGenerator : MonoBehaviour
         var enemy = Instantiate(enemies[0], transform.position, transform.rotation);
         //Optimize this using queues and scriptables as in the last two games
         enemy.GetComponent<EnemyBehavior>().SetEnemyPoints(enemyPoints);
+    }
+
+    public static void ChangeEnemiesPhase(int numEnemies)
+    {
+        _enemiesPerPhase = numEnemies;
     }
 }

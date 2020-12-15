@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class EnemyBehavior : MonoBehaviour
 {
-    [SerializeField, Range(1, 20)] private float speed;
+    private static float _speed;
 
     //Health system?
     [SerializeField, Range(5, 30)] private float life;
@@ -45,7 +44,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (_attacking) return;
         _rigidbody.MovePosition(_rigidbody.position +
-                                (Vector2) (_target - transform.position).normalized * (Time.deltaTime * speed));
+                                (Vector2) (_target - transform.position).normalized * (Time.deltaTime * _speed));
         Debug.Log(_rigidbody.velocity);
     }
 
@@ -68,5 +67,11 @@ public class EnemyBehavior : MonoBehaviour
     public void SetEnemyPoints(List<Transform> lEnemyPoints)
     {
         _enemyPoints = lEnemyPoints;
+    }
+
+
+    public static void ChangeSpeed(float speed)
+    {
+        _speed = speed;
     }
 }
