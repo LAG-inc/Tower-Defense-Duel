@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyPool))]
 public class EnemyGenerator : MonoBehaviour
 {
     [SerializeField] private EnemyPool enemyPool;
@@ -19,14 +20,12 @@ public class EnemyGenerator : MonoBehaviour
 
     private void Update()
     {
-        //return if pause
-
-        if (_enemiesPerPhase == 0) return;
-
+        if (_enemiesPerPhase <= 0) return;
 
         _currentSpawnTime += Time.deltaTime;
 
         if (!(_currentSpawnTime >= spawnRate)) return;
+
         _currentSpawnTime = 0;
         ActivateEnemy();
     }
@@ -37,10 +36,15 @@ public class EnemyGenerator : MonoBehaviour
     /// </summary>
     private void ActivateEnemy()
     {
+        var currentEnemy = Random.Range(0, enemies.Count);
+
         enemyPool.ExtractFromQueue().GetComponent<EnemyBehavior>()
-            .SetComponents(enemies[0].life, enemies[0].enemySprite, enemies[0].damage);
+            .SetComponents(enemies[currentEnemy].life, enemies[currentEnemy].enemySprite, enemies[currentEnemy].damage,
+                enemyPool);
+
         _enemiesPerPhase--;
     }
+
 
     /// <summary>
     /// Change the quantity of enemies in phase

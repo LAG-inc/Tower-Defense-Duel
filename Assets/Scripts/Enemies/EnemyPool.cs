@@ -18,16 +18,20 @@ public class EnemyPool : ObjectPool
         FillQueue();
     }
 
-
     /// <summary>
-    /// Create a new enemy and assigns it points to follow
+    /// Create a new enemy and assigns its points to follow
     /// </summary>
     /// <returns></returns>
     protected override GameObject CreateObj()
     {
-        var obj = Instantiate(prefab);
-        obj.GetComponent<EnemyBehavior>().SetEnemyPoints(enemyPoints);
+        var obj = Instantiate(prefab, transform.position, transform.rotation, transform);
+
+        var currentEnemy = obj.GetComponent<EnemyBehavior>();
+
+        currentEnemy.SetEnemyPoints(enemyPoints);
+
         obj.SetActive(false);
+
         return obj;
     }
 }

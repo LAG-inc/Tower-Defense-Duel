@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "WaveScriptable", menuName = "Waves")]
+
+[CreateAssetMenu(fileName = "WaveScriptable", menuName = "Custom/Waves")]
 public class WavesScriptable : ScriptableObject
 {
     public float enemyVelocity;

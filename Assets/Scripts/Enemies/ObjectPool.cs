@@ -3,14 +3,16 @@ using UnityEngine;
 
 public abstract class ObjectPool : MonoBehaviour
 {
-    protected Queue<GameObject> _objects = new Queue<GameObject>();
+    private Queue<GameObject> _objects = new Queue<GameObject>();
+
+    //Prefab which contains all components of the object to instance
     [SerializeField] protected GameObject prefab;
 
 
     /// <summary>
-    /// Instance a ned game object and make changes in itself
+    /// Instance a game object and make changes in itself
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The game object instanced</returns>
     protected abstract GameObject CreateObj();
 
     /// <summary>
@@ -37,7 +39,9 @@ public abstract class ObjectPool : MonoBehaviour
         }
 
         var obj = _objects.Dequeue();
+
         obj.SetActive(true);
+
         return obj;
     }
 

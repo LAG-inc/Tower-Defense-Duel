@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,10 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour
 {
     private static float _speed;
+
+    private EnemyPool _enemyPool;
     private SpriteRenderer _spriteRenderer;
+    private Rigidbody2D _rigidbody;
 
     //Health system?
     [SerializeField, Range(5, 30)] private float life;
@@ -14,13 +18,13 @@ public class EnemyBehavior : MonoBehaviour
 
     private List<Transform> _enemyPoints = new List<Transform>();
     private int _currentTargetIndex;
-    private bool _attacking;
 
     private Vector3 _target;
-    private Rigidbody2D _rigidbody;
 
     //Set true when die animation finish (Machine State)
     public bool readyToDeactivate;
+
+    private bool _attacking;
 
     private void Awake()
     {
@@ -48,6 +52,8 @@ public class EnemyBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_attacking) return;
+
         // if (_attacking) return;
         _rigidbody.MovePosition(_rigidbody.position +
                                 (Vector2) (_target - transform.position).normalized * (Time.deltaTime * _speed));
@@ -62,6 +68,7 @@ public class EnemyBehavior : MonoBehaviour
             _attacking = true;
         else
             _currentTargetIndex++;
+
         _target = _enemyPoints[_currentTargetIndex].position;
     }
 
@@ -96,7 +103,8 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnDisable()
     {
-        //Todo: return to currentObject pool
+        if (_enemyPool != null)
+            _enemyPool.EnqueueObj(gameObject);
     }
 
     /// <summary>
@@ -110,10 +118,11 @@ public class EnemyBehavior : MonoBehaviour
     }
 
 
-    public void SetComponents(float lLife, Sprite sprite, float attackPower)
+    public void SetComponents(float lLife, Sprite sprite, float attackPower, EnemyPool pool)
     {
         life = lLife;
         _spriteRenderer.sprite = sprite;
         damage = attackPower;
+        _enemyPool = pool;
     }
 }
