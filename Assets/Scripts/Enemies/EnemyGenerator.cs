@@ -1,56 +1,51 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class EnemyGenerator : MonoBehaviour
 {
+    [SerializeField] private EnemyPool enemyPool;
+
     [SerializeField, Tooltip("Constant time between enemies in seconds"), Range(0, 5)]
     private float spawnRate;
 
-    [SerializeField, Tooltip("Pattern Points, no matter the order")]
-    private List<Transform> enemyPoints = new List<Transform>();
-
     [SerializeField, Tooltip("Enemies prefabs")]
-    private List<GameObject> enemies = new List<GameObject>();
+    private List<EnemyScriptable> enemies = new List<EnemyScriptable>();
 
 
     private static int _enemiesPerPhase;
 
-    //A better name for _currentEnemiesPerPhase I think
-    private int _enemiesSpawned;
-
     private float _currentSpawnTime;
 
-
-    private void Start()
-    {
-        enemyPoints = enemyPoints.OrderBy(enemy => enemy.gameObject.GetComponent<EnemyPoint>().ID).ToList();
-    }
 
     private void Update()
     {
         //return if pause
 
-        if (_enemiesSpawned >= _enemiesPerPhase)
-        {
-            return;
-        }
+        if (_enemiesPerPhase == 0) return;
+
 
         _currentSpawnTime += Time.deltaTime;
 
         if (!(_currentSpawnTime >= spawnRate)) return;
         _currentSpawnTime = 0;
-        CreateEnemy();
+        ActivateEnemy();
     }
 
-    private void CreateEnemy()
+
+    /// <summary>
+    /// Activate enemy Prefab and assign it properties 
+    /// </summary>
+    private void ActivateEnemy()
     {
-        _enemiesSpawned++;
-        var enemy = Instantiate(enemies[0], transform.position, transform.rotation);
-        //Optimize this using queues and scriptables as in the last two games
-        enemy.GetComponent<EnemyBehavior>().SetEnemyPoints(enemyPoints);
+        enemyPool.ExtractFromQueue().GetComponent<EnemyBehavior>()
+            .SetComponents(enemies[0].life, enemies[0].enemySprite, enemies[0].damage);
+        _enemiesPerPhase--;
     }
 
+    /// <summary>
+    /// Change the quantity of enemies in phase
+    /// </summary>
+    /// <param name="numEnemies"></param>
     public static void ChangeEnemiesPhase(int numEnemies)
     {
         _enemiesPerPhase = numEnemies;

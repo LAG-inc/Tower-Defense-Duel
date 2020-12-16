@@ -10,6 +10,7 @@ public class WaveManager : MonoBehaviour
     private void Awake()
     {
         _currentPhase = PlayerPrefs.HasKey("Wave") ? PlayerPrefs.GetInt("Wave") : 0;
+        ConfigureNewPhase();
     }
 
     /// <summary>
