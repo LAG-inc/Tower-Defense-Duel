@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7107555057184998384}
   - component: {fileID: 7107555057184998385}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: EASDA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.8622582, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -95,9 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d4d90cda5b7b964994210120048b8a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
   life: 5
   damage: 5
+  readyToDeactivate: 0
 --- !u!50 &7107555057184998385
 Rigidbody2D:
   serializedVersion: 4
