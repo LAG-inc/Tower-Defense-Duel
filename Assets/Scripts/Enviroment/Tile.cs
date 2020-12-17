@@ -8,11 +8,13 @@ public class Tile : MonoBehaviour
     private SpriteRenderer _sprite;
     private Color _initialColor;
     private Color _onMouseOverColor;
-
     private static bool _isOverTile;
-
-    // Indicates if the tile is empty or not
+        // Indicates if the tile is empty or not
     private bool _isEmpty = true;
+
+    [Header("Colors")]
+    [SerializeField] private Color _showAvailableColor;
+    [SerializeField] private Color _showUnavailableColor;
 
     private void Awake()
     {
@@ -23,7 +25,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseOver()
     {
-        _sprite.color = _onMouseOverColor;
+        _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 0.8f);
     }
 
     private void OnMouseEnter()
@@ -34,7 +36,7 @@ public class Tile : MonoBehaviour
     private void OnMouseExit()
     {
         _isOverTile = false;
-        _sprite.color = _initialColor;
+        _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 0.5f);
     }
 
     // In a future maybe we'll need to use raycast instead
@@ -44,11 +46,22 @@ public class Tile : MonoBehaviour
             return;
         OnMouseClick?.Invoke();
         _isEmpty = false;
-        Debug.Log("Mouse Up");
+        ChangeState();
     }
 
     private void OnDestroy()
     {
         OnMouseClick = null;
     }
+
+    public void ChangeState()
+    {
+        if(!FactoryTracker.GetActiveTiles().Contains(this)) return;
+        if (_isEmpty)
+            _sprite.color = _showAvailableColor;
+        else
+            _sprite.color = _showUnavailableColor;
+    }
+
+    internal void ResetState() => _sprite.color = _initialColor;
 }

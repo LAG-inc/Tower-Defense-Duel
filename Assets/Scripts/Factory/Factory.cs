@@ -7,7 +7,7 @@ public class Factory : MonoBehaviour
     public void PrepareUnitGeneration(GameObject unit)
     {
         _unitToGenerate = unit;
-        FactoryTracker.SetCanPlaceUnit();
+        FactoryTracker.SetCanPlaceUnit(true);
     }
 
     public void GenerateUnit(Vector2 location)
