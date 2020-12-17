@@ -1,14 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class FactoryTracker : MonoBehaviour
 {
     private static Factory _currentFactory;
     private static FactoryInteractive _currentInteractive;
     private static bool _canPlaceUnit;
+    private static List<Tile> _activeTiles;
 
     void Start()
     {
         Tile.OnMouseClick += () => PlaceUnit();
+        _activeTiles = new List<Tile>();
     }
 
     private void PlaceUnit()
@@ -19,7 +22,8 @@ public class FactoryTracker : MonoBehaviour
             Vector2.zero,
             10.0f,
             LayerMask.GetMask("Tile"));
-        if (hit)
+        Tile tile = hit.collider.GetComponent<Tile>();
+        if (FactoryTracker.GetActiveTiles().Contains(tile))
         {
             // TODO: pass game object to have the reference
             _currentFactory?.GenerateUnit(hit.collider.transform.position);
@@ -30,18 +34,19 @@ public class FactoryTracker : MonoBehaviour
     public static void SetCurrentFactory(Factory factory, FactoryInteractive interactive)
     {
         if (_currentFactory)
+        {
             _currentInteractive.LoseFocus();
+            _activeTiles.Clear();
+        }
         _currentFactory = factory;
         _currentInteractive = interactive;
     }
 
-    public static void SetCanPlaceUnit(bool canPlaceUnit=true)
-    {
-        _canPlaceUnit = canPlaceUnit;
-    }
+    public static void SetCanPlaceUnit(bool canPlaceUnit) => _canPlaceUnit = canPlaceUnit;
 
-    public static bool GetCanPlaceUnit()
-    {
-        return _canPlaceUnit;
-    }
+    public static bool GetCanPlaceUnit() => _canPlaceUnit;
+
+    public static void AddActiveTile(Tile tile) => _activeTiles.Add(tile);
+
+    public static List<Tile> GetActiveTiles() => _activeTiles;
 }
