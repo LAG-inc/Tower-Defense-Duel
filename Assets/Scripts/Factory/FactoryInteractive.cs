@@ -28,6 +28,7 @@ public class FactoryInteractive : MonoBehaviour
     {
         spriteRenderer.color = Color.white;
         ui.gameObject.SetActive(false);
+        FactoryTracker.SetCanPlaceUnit(false);
         ShowArea(false);
     }
 

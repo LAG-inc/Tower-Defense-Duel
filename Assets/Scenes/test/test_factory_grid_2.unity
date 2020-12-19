@@ -7703,11 +7703,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1055891385314767377, guid: c88528b777ca3bf4bb3530e37bf076e6,
-        type: 3}
-      propertyPath: maxNumberUnits
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 1055891385314767380, guid: c88528b777ca3bf4bb3530e37bf076e6,
         type: 3}
       propertyPath: m_RootOrder
