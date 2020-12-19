@@ -3407,18 +3407,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3e3c16b795122449c2d95c595b4d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyPool: {fileID: 0}
   spawnRate: 1
-  enemyPoints:
-  - {fileID: 1016799974}
-  - {fileID: 1266677846}
-  - {fileID: 2013500920}
-  - {fileID: 291008331}
-  - {fileID: 1278104869}
   enemies:
-  - {fileID: 7107555057184998397, guid: a4fac1ea9c8387240962159457b011a8, type: 3}
-  - {fileID: 7107555057184998397, guid: a4fac1ea9c8387240962159457b011a8, type: 3}
-  - {fileID: 7107555057184998397, guid: a4fac1ea9c8387240962159457b011a8, type: 3}
-  enemiesPerPhase: 15
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1001 &887350802
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4017,18 +4011,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3e3c16b795122449c2d95c595b4d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyPool: {fileID: 0}
   spawnRate: 1
-  enemyPoints:
-  - {fileID: 1016799974}
-  - {fileID: 1266677846}
-  - {fileID: 2013500920}
-  - {fileID: 291008331}
-  - {fileID: 1278104869}
   enemies:
-  - {fileID: 7107555057184998397, guid: a4fac1ea9c8387240962159457b011a8, type: 3}
-  - {fileID: 7107555057184998397, guid: a4fac1ea9c8387240962159457b011a8, type: 3}
-  - {fileID: 7107555057184998397, guid: a4fac1ea9c8387240962159457b011a8, type: 3}
-  enemiesPerPhase: 0
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1068351443
 Transform:
   m_ObjectHideFlags: 0
@@ -7715,6 +7703,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1055891385314767377, guid: c88528b777ca3bf4bb3530e37bf076e6,
+        type: 3}
+      propertyPath: maxNumberUnits
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1055891385314767380, guid: c88528b777ca3bf4bb3530e37bf076e6,
         type: 3}
       propertyPath: m_RootOrder
