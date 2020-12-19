@@ -42,7 +42,7 @@ public class Tile : MonoBehaviour
     // In a future maybe we'll need to use raycast instead
     private void OnMouseUp()
     {
-        if (!_isOverTile || !_isEmpty || !FactoryTracker.GetCanPlaceUnit())
+        if (!_isOverTile || !_isEmpty || !FactoryTracker.CanPlaceUnit())
             return;
         OnMouseClick?.Invoke();
         _isEmpty = false;
@@ -57,7 +57,7 @@ public class Tile : MonoBehaviour
     public void ChangeState()
     {
         if(!FactoryTracker.GetActiveTiles().Contains(this)) return;
-        if (_isEmpty)
+        if (_isEmpty || FactoryTracker.CanPlaceUnit())
             _sprite.color = _showAvailableColor;
         else
             _sprite.color = _showUnavailableColor;

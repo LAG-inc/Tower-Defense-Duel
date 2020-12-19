@@ -42,6 +42,11 @@ public class FactoryTracker : MonoBehaviour
         _currentInteractive = interactive;
     }
 
+    public static bool CanPlaceUnit()
+    {
+        return (_canPlaceUnit && _currentFactory.GetCanGenerateUnit()) ? true : false;
+    }
+
     public static void SetCanPlaceUnit(bool canPlaceUnit) => _canPlaceUnit = canPlaceUnit;
 
     public static bool GetCanPlaceUnit() => _canPlaceUnit;

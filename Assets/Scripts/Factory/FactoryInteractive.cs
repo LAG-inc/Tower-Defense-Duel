@@ -9,10 +9,8 @@ public class FactoryInteractive : MonoBehaviour
     [SerializeField] private Canvas ui;
 
     [Header("Factory range")]
-    [SerializeField, Range(2f, 10f)]
-    private float _rangeX = 2;
-    [SerializeField, Range(2f, 10f)]
-    private float _rangeY = 2;
+    [SerializeField, Range(2f, 10f)] private float _rangeX = 2;
+    [SerializeField, Range(2f, 10f)] private float _rangeY = 2;
 
     [Header("Colors")]
     [SerializeField] private Color focusColor;
@@ -30,6 +28,7 @@ public class FactoryInteractive : MonoBehaviour
     {
         spriteRenderer.color = Color.white;
         ui.gameObject.SetActive(false);
+        FactoryTracker.SetCanPlaceUnit(false);
         ShowArea(false);
     }
 
