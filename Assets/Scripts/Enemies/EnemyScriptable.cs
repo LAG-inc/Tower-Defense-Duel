@@ -5,6 +5,7 @@
 public class EnemyScriptable : ScriptableObject
 {
     public Sprite enemySprite;
+    public Animator animator;
     public float life;
     public float damage;
 }

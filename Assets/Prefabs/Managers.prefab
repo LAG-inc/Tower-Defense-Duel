@@ -82,6 +82,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16c8f0b62944d2c428e80e7ba404bdac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveConfiguration:
-  - {fileID: 11400000, guid: f0e6c296823e05948b82530307448abe, type: 2}
-  - {fileID: 11400000, guid: f0e6c296823e05948b82530307448abe, type: 2}
+  multiplier: 3
