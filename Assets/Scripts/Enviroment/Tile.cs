@@ -9,8 +9,10 @@ public class Tile : MonoBehaviour
     private Color _initialColor;
     private Color _onMouseOverColor;
     private static bool _isOverTile;
-        // Indicates if the tile is empty or not
-    private bool _isEmpty = true;
+
+    [Header("Options")]
+    // Indicates if the tile is empty or not
+    [SerializeField] private bool _isEmpty = true;
 
     [Header("Colors")]
     [SerializeField] private Color _showAvailableColor;

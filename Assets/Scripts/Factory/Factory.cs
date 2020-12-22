@@ -16,11 +16,8 @@ public class Factory : MonoBehaviour
     public void GenerateUnit(Vector2 location)
     {
         if (!_canGenerateUnit) return;
-        if (_unitToGenerate)
-        {
-            Instantiate(_unitToGenerate, location, Quaternion.identity);
-            _currentNumberUnits += 1;
-        }
+        Instantiate(_unitToGenerate, location, Quaternion.identity);
+        _currentNumberUnits += 1;
         _canGenerateUnit = _currentNumberUnits == maxNumberUnits ? false : true;
     }
 

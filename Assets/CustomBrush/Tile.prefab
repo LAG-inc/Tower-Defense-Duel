@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8081194048100289349}
-  - component: {fileID: 8081194048100289348}
   - component: {fileID: 8081194048100289350}
+  - component: {fileID: 8081194048100289348}
   - component: {fileID: 8081194048100289351}
   m_Layer: 9
   m_Name: Tile
@@ -33,6 +33,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8081194048100289350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8081194048100289347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63ffe1d13048fa440b48e8e51100f028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isEmpty: 1
+  _showAvailableColor: {r: 0.3647059, g: 0.65882355, b: 0.19607843, a: 0.49803922}
+  _showUnavailableColor: {r: 0.65882355, g: 0.19607843, b: 0.19607843, a: 0.49803922}
 --- !u!212 &8081194048100289348
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -83,20 +98,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8081194048100289350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8081194048100289347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63ffe1d13048fa440b48e8e51100f028, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _showAvailableColor: {r: 0.3647059, g: 0.65882355, b: 0.19607843, a: 0.49803922}
-  _showUnavailableColor: {r: 0.65882355, g: 0.19607843, b: 0.19607843, a: 0.49803922}
 --- !u!61 &8081194048100289351
 BoxCollider2D:
   m_ObjectHideFlags: 0
