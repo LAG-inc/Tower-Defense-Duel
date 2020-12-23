@@ -40,7 +40,7 @@ public class EnemyGenerator : MonoBehaviour
 
         enemyPool.ExtractFromQueue().GetComponent<EnemyBehavior>()
             .SetComponents(enemies[currentEnemy].life, enemies[currentEnemy].enemySprite, enemies[currentEnemy].damage,
-                enemyPool);
+                enemyPool, enemies[currentEnemy].animator);
 
         _enemiesPerPhase--;
     }

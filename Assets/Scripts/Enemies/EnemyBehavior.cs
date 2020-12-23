@@ -18,7 +18,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private List<Transform> _enemyPoints = new List<Transform>();
     private int _currentTargetIndex;
-
+    private Animator _animator;
     private Vector3 _target;
 
     //Set true when die animation finish (Machine State)
@@ -26,11 +26,15 @@ public class EnemyBehavior : MonoBehaviour
 
     private bool _attacking;
 
+
+    private static readonly int Attacking = Animator.StringToHash("Attacking");
+
     private void Awake()
     {
         _attacking = false;
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
         GameManager.OnPause += () => _rigidbody.simulated = false;
     }
 
@@ -101,6 +105,11 @@ public class EnemyBehavior : MonoBehaviour
     }
 
 
+    private void OnEnable()
+    {
+        SetAnimValues();
+    }
+
     private void OnDisable()
     {
         if (_enemyPool != null)
@@ -113,16 +122,23 @@ public class EnemyBehavior : MonoBehaviour
     /// <returns></returns>
     private IEnumerator DieBehavior()
     {
-        yield return new WaitUntil(() => readyToDeactivate);
+        yield return new WaitUntil(() => readyToDeactivate); // OnAnimationFinished
         gameObject.SetActive(false);
     }
 
 
-    public void SetComponents(float lLife, Sprite sprite, float attackPower, EnemyPool pool)
+    public void SetComponents(float lLife, Sprite sprite, float attackPower, EnemyPool pool, Animator animator)
     {
         life = lLife;
         _spriteRenderer.sprite = sprite;
         damage = attackPower;
         _enemyPool = pool;
+        _animator = animator;
+    }
+
+
+    private void SetAnimValues()
+    {
+        _animator.SetBool(Attacking, false);
     }
 }

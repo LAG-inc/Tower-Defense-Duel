@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
-public static class Util
+public static class UtilLag
 {
     /// <summary>
     /// Encuentra el valor de un angulo a partir de un Vector
@@ -24,5 +25,30 @@ public static class Util
         var n = Mathf.Atan2(lVector.y, lVector.x) * Mathf.Rad2Deg;
         n += n < 0 ? 360 : 0;
         return n;
+    }
+
+    /// <summary>
+    /// A faster fibonacci recursive function
+    /// </summary>
+    /// <param name="n">Fibonacci number to get</param>
+    /// <returns> f(n) </returns>
+    public static int Fibonacci(int n)
+    {
+        switch (n)
+        {
+            case 0:
+                return 0;
+            case 1:
+            case 2:
+                return 1;
+        }
+
+        if (n % 2 == 0) return Fibonacci(n / 2) * (Fibonacci(n / 2 + 1) + Fibonacci(n / 2 - 1));
+
+        int n1, n2;
+        n1 = Fibonacci((n + 1) / 2);
+        n2 = Fibonacci((n - 1) / 2);
+
+        return n1 * n1 + n2 * n2;
     }
 }

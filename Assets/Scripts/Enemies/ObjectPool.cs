@@ -6,7 +6,7 @@ public abstract class ObjectPool : MonoBehaviour
     private Queue<GameObject> _objects = new Queue<GameObject>();
 
     //Prefab which contains all components of the object to instance
-    [SerializeField] protected GameObject prefab;
+    [SerializeField] protected GameObject basePrefab;
 
 
     /// <summary>

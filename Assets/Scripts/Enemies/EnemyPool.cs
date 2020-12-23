@@ -24,7 +24,7 @@ public class EnemyPool : ObjectPool
     /// <returns></returns>
     protected override GameObject CreateObj()
     {
-        var obj = Instantiate(prefab, transform.position, transform.rotation, transform);
+        var obj = Instantiate(basePrefab, transform.position, transform.rotation, transform);
 
         var currentEnemy = obj.GetComponent<EnemyBehavior>();
 

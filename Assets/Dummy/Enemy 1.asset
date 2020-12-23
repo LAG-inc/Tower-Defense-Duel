@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5316f420024bde902941acbc2bb2a1, type: 3}
   m_Name: Enemy 1
   m_EditorClassIdentifier: 
-  enemySprite: {fileID: -6299855667719623413, guid: 8455ad5f6bbeff94893ecfe1f8e7d18f,
-    type: 3}
+  enemySprite: {fileID: 21300000, guid: 2e8953c93cbca38429a9958166b35cf5, type: 3}
   life: 4
   damage: 5

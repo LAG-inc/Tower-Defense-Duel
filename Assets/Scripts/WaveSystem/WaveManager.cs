@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    [SerializeField] private List<WavesScriptable> waveConfiguration = new List<WavesScriptable>();
-    private int _currentPhase;
-
+    private int _currentLvl;
+    [SerializeField] private int multiplier;
 
     private void Awake()
     {
-        _currentPhase = PlayerPrefs.HasKey("Wave") ? PlayerPrefs.GetInt("Wave") : 0;
+        _currentLvl = PlayerPrefs.HasKey("Wave") ? PlayerPrefs.GetInt("Wave") : 1;
         ConfigureNewPhase();
     }
 
@@ -18,8 +16,12 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     private void ConfigureNewPhase()
     {
-        EnemyGenerator.ChangeEnemiesPhase(waveConfiguration[_currentPhase].enemiesInPhase);
-        EnemyBehavior.ChangeSpeed(waveConfiguration[_currentPhase].enemyVelocity);
+        var num = _currentLvl % 10 == 0
+            ? UtilLag.Fibonacci(9) * multiplier + _currentLvl / 10 //  + spawnFactor * lvl
+            : UtilLag.Fibonacci(_currentLvl % 10) * multiplier; //  + spawnFactor * lvl
+
+        EnemyGenerator.ChangeEnemiesPhase(num);
+        EnemyBehavior.ChangeSpeed(2);
     }
 
     /// <summary>
@@ -27,10 +29,11 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     public void WinPhase()
     {
-        PlayerPrefs.SetInt("Wave", _currentPhase);
-        _currentPhase++;
+        PlayerPrefs.SetInt("Wave", _currentLvl);
+        _currentLvl++;
         ConfigureNewPhase();
     }
 
-    //Todo : At the end we will need gamestates, I think, cuz we need pause/game/prepare-phase 
+
+//Todo : At the end we will need gamestates, I think, cuz we need pause/game/prepare-phase 
 }
