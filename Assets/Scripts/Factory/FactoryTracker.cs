@@ -6,11 +6,14 @@ public class FactoryTracker : MonoBehaviour
     private static Factory _currentFactory;
     private static FactoryInteractive _currentInteractive;
     private static bool _canPlaceUnit;
+    private static bool _canPlaceFactory;
     private static List<Tile> _activeTiles;
+    private static GameObject _factoryToGenerate;
 
     void Start()
     {
         Tile.OnMouseClick += () => PlaceUnit();
+        Tile.OnMouseClick += () => PlaceFactory();
         _activeTiles = new List<Tile>();
     }
 
@@ -31,6 +34,23 @@ public class FactoryTracker : MonoBehaviour
         }
     }
 
+    private void PlaceFactory()
+    {
+        if (!_canPlaceFactory) return;
+        RaycastHit2D hit = Physics2D.Raycast(
+            Camera.main.ScreenToWorldPoint(Input.mousePosition),
+            Vector2.zero,
+            10.0f,
+            LayerMask.GetMask("Tile")
+        );
+        if (hit)
+        {
+            Instantiate(_factoryToGenerate, hit.collider.transform.position, Quaternion.identity);
+            _canPlaceFactory = false;
+            Debug.Log("Probando");
+        }
+    }
+
     public static void SetCurrentFactory(Factory factory, FactoryInteractive interactive)
     {
         if (_currentFactory)
@@ -47,11 +67,17 @@ public class FactoryTracker : MonoBehaviour
         return (_canPlaceUnit && _currentFactory.GetCanGenerateUnit()) ? true : false;
     }
 
-    public static void SetCanPlaceUnit(bool canPlaceUnit) => _canPlaceUnit = canPlaceUnit;
+    public static void SetCanPlaceUnit(bool canPlace) => _canPlaceUnit = canPlace;
 
     public static bool GetCanPlaceUnit() => _canPlaceUnit;
+
+    public static void SetCanPlaceFactory(bool canPlace) => _canPlaceFactory = canPlace;
+
+    public static bool GetCanPlaceFactory() => _canPlaceFactory;
 
     public static void AddActiveTile(Tile tile) => _activeTiles.Add(tile);
 
     public static List<Tile> GetActiveTiles() => _activeTiles;
+
+    public static void SetFactoryToGenerate(GameObject factory) => _factoryToGenerate = factory;
 }

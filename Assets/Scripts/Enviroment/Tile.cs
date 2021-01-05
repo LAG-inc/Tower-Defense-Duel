@@ -18,6 +18,9 @@ public class Tile : MonoBehaviour
     [SerializeField] private Color _showAvailableColor;
     [SerializeField] private Color _showUnavailableColor;
 
+    [Header("Components")]
+    [SerializeField] private Collider2D _collider;
+
     private void Awake()
     {
         _sprite = GetComponent<SpriteRenderer>();
@@ -44,11 +47,21 @@ public class Tile : MonoBehaviour
     // In a future maybe we'll need to use raycast instead
     private void OnMouseUp()
     {
-        if (!_isOverTile || !_isEmpty || !FactoryTracker.CanPlaceUnit())
-            return;
-        OnMouseClick?.Invoke();
-        _isEmpty = false;
-        ChangeState();
+        // Place units
+        if (_isOverTile && _isEmpty && FactoryTracker.CanPlaceUnit())
+        {
+            OnMouseClick?.Invoke();
+            _isEmpty = false;
+            ChangeState();
+        }
+
+        // Place factories
+        if (FactoryTracker.GetCanPlaceFactory())
+        {
+            OnMouseClick?.Invoke();
+            _isEmpty = false;
+            _collider.enabled = false;
+        }
     }
 
     private void OnDestroy()
