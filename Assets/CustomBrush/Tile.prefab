@@ -48,6 +48,7 @@ MonoBehaviour:
   _isEmpty: 1
   _showAvailableColor: {r: 0.3647059, g: 0.65882355, b: 0.19607843, a: 0.49803922}
   _showUnavailableColor: {r: 0.65882355, g: 0.19607843, b: 0.19607843, a: 0.49803922}
+  _collider: {fileID: 8081194048100289351}
 --- !u!212 &8081194048100289348
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -8,7 +8,6 @@ public class Tile : MonoBehaviour
     private SpriteRenderer _sprite;
     private Color _initialColor;
     private Color _onMouseOverColor;
-    private static bool _isOverTile;
 
     [Header("Options")]
     // Indicates if the tile is empty or not
@@ -17,6 +16,9 @@ public class Tile : MonoBehaviour
     [Header("Colors")]
     [SerializeField] private Color _showAvailableColor;
     [SerializeField] private Color _showUnavailableColor;
+
+    [Header("Components")]
+    [SerializeField] private Collider2D _collider;
 
     private void Awake()
     {
@@ -30,25 +32,30 @@ public class Tile : MonoBehaviour
         _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 0.8f);
     }
 
-    private void OnMouseEnter()
-    {
-        _isOverTile = true;
-    }
-
     private void OnMouseExit()
     {
-        _isOverTile = false;
         _sprite.color = new Color(_sprite.color.r, _sprite.color.g, _sprite.color.b, 0.5f);
     }
 
     // In a future maybe we'll need to use raycast instead
     private void OnMouseUp()
     {
-        if (!_isOverTile || !_isEmpty || !FactoryTracker.CanPlaceUnit())
-            return;
-        OnMouseClick?.Invoke();
-        _isEmpty = false;
-        ChangeState();
+        if (!_isEmpty) return;
+        // Place units
+        if (FactoryTracker.CanPlaceUnit())
+        {
+            OnMouseClick?.Invoke();
+            _isEmpty = false;
+            ChangeState();
+        }
+
+        // Place factories
+        if (FactoryTracker.GetCanPlaceFactory())
+        {
+            OnMouseClick?.Invoke();
+            _isEmpty = false;
+            _collider.enabled = false;
+        }
     }
 
     private void OnDestroy()
