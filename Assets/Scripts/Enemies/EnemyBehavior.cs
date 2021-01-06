@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -15,8 +15,9 @@ public class EnemyBehavior : MonoBehaviour
     //Health system?
     [SerializeField, Range(5, 30)] private float life;
     [SerializeField, Range(5, 20)] private float damage;
+    [SerializeField, Range(5, 20)] private float attackeSpeed;
 
-    private List<Transform> _enemyPoints = new List<Transform>();
+    private List<Vector3> _enemyPoints = new List<Vector3>();
     private int _currentTargetIndex;
     private Animator _animator;
     private Vector3 _target;
@@ -35,18 +36,18 @@ public class EnemyBehavior : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
-        GameManager.OnPause += () => _rigidbody.simulated = false;
     }
 
     private void Start()
     {
         _currentTargetIndex = 0;
-        _target = _enemyPoints[_currentTargetIndex].position;
+        _target = _enemyPoints[_currentTargetIndex];
     }
 
     public void Update()
     {
         if (_attacking) return;
+
         if (Mathf.Abs(transform.position.x - _target.x) < 0.1f &&
             Mathf.Abs(transform.position.y - _target.y) < 0.1f)
         {
@@ -73,14 +74,14 @@ public class EnemyBehavior : MonoBehaviour
         else
             _currentTargetIndex++;
 
-        _target = _enemyPoints[_currentTargetIndex].position;
+        _target = _enemyPoints[_currentTargetIndex];
     }
 
     /// <summary>
     /// Set the current points pattern of enemy
     /// </summary>
     /// <param name="lEnemyPoints"> Set the instance enemy pattern points</param>
-    public void SetEnemyPoints(List<Transform> lEnemyPoints)
+    public void SetEnemyPoints(List<Vector3> lEnemyPoints)
     {
         _enemyPoints = lEnemyPoints;
     }

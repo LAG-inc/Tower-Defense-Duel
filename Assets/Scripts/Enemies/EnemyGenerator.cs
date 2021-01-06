@@ -16,7 +16,13 @@ public class EnemyGenerator : MonoBehaviour
     private static int _enemiesPerPhase;
 
     private float _currentSpawnTime;
+    private Collider2D _xPositionCollider;
 
+
+    private void Awake()
+    {
+        _xPositionCollider = GetComponent<Collider2D>();
+    }
 
     private void Update()
     {
@@ -38,9 +44,16 @@ public class EnemyGenerator : MonoBehaviour
     {
         var currentEnemy = Random.Range(0, enemies.Count);
 
-        enemyPool.ExtractFromQueue().GetComponent<EnemyBehavior>()
+        var enemy = enemyPool.ExtractFromQueue();
+
+
+        enemy.GetComponent<EnemyBehavior>()
             .SetComponents(enemies[currentEnemy].life, enemies[currentEnemy].enemySprite, enemies[currentEnemy].damage,
                 enemyPool, enemies[currentEnemy].animator);
+
+        var randomPos = Random.Range(_xPositionCollider.bounds.min.x, _xPositionCollider.bounds.max.x);
+
+        enemy.transform.position = new Vector3(randomPos, enemy.transform.position.y);
 
         _enemiesPerPhase--;
     }
