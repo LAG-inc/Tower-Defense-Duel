@@ -7,8 +7,11 @@ public class Factory : MonoBehaviour
     [SerializeField] private int maxNumberUnits;
     private int _currentNumberUnits;
     private bool _canGenerateUnit = true;
-    private GenerableButtonData buttonPressedData;
+    private GenerableButton _buttonPressed;
     private GameObject _unitToGenerate;
+    public bool CancelUnit { get; set; }
+
+    //private float _creationTime;
 
     [SerializeField] private List<GenerableButton> _generableButtons;
 
@@ -21,25 +24,36 @@ public class Factory : MonoBehaviour
 
     }
 
-    public void PrepareUnitGeneration(GenerableButtonData buttonData)
+    public void PrepareUnitGeneration(GenerableButton button)
     {
-        buttonPressedData = buttonData;
+        _buttonPressed = button;
+        //_creationTime = _buttonPressedData.generablesData[0].creationTime;
+        CancelUnit = false;
         FactoryTracker.SetCanPlaceUnit(true);
     }
 
-    public void GenerateUnit(Vector2 location)
+    public IEnumerator GenerateUnit(Vector2 location)
     {
-        if (!_canGenerateUnit) return;
-        for (int i = 0; i < buttonPressedData.generablesData.Length; i++)
+        if (!_canGenerateUnit) yield break;
+
+        GenerableButtonData bData = _buttonPressed.GetButtonData();
+
+        yield return StartCoroutine(TimerBar(bData.generablesData[0].creationTime, _buttonPressed));
+
+        if (CancelUnit) yield break;
+
+        for (int i = 0; i < bData.generablesData.Length; i++)
         {
-            GenerableData gDataRef = buttonPressedData.generablesData[i];
+            GenerableData gDataRef = bData.generablesData[i];
             SetupGenerable(ref _unitToGenerate, gDataRef);
-            _unitToGenerate.transform.position = location + buttonPressedData.relativeOffsets[i];
+            _unitToGenerate.transform.position = location + bData.relativeOffsets[i];
             _unitToGenerate.SetActive(true);
         }
-        _currentNumberUnits += buttonPressedData.generablesData.Length;
+        _currentNumberUnits += bData.generablesData.Length;
         CheckGenerableButtonAvailability();
         _canGenerateUnit = _currentNumberUnits == maxNumberUnits ? false : true;
+
+        yield return StartCoroutine(TimerBar(bData.generablesData[0].hitPoints, _unitToGenerate.GetComponent<ThinkingGenerable>()));
     }
 
     public bool GetCanGenerateUnit() => _canGenerateUnit;
@@ -101,7 +115,7 @@ public class Factory : MonoBehaviour
         if (g.target.state != ThinkingGenerable.States.Dead)
         {
             float newHealth = g.target.SufferDamage(g.damage);
-            g.target.healthBar.SetHealth(newHealth);
+            g.target.bar.SetHealth(newHealth);
         }
     }
 
@@ -140,4 +154,23 @@ public class Factory : MonoBehaviour
 
         Destroy(g.gameObject);
     }
+
+    //No estoy seguro si deberia ir en este script
+    public IEnumerator TimerBar(float time, dynamic obj)
+    {
+        UIManager.SI.AddBar(obj);
+
+        for (float i = time*10; i > 0; i--)
+        {
+            if (CancelUnit) break;
+
+            obj.bar.SetHealth((i/10) - 0.1f);
+
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+
+        UIManager.SI.RemoveBar(obj);
+    }
+
+    
 }

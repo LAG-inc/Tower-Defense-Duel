@@ -3,13 +3,15 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class GenerableButton : MonoBehaviour, IPointerUpHandler
 {
-    public UnityAction<GenerableButtonData> OnMouseUp;
+    public UnityAction<GenerableButton> OnMouseUp;
 
     [SerializeField] private GenerableButtonData buttonData;
     private Button buttonComponent;
     private Image imageComponent;
+    [HideInInspector] public Bar bar;
 
     private void Start()
     {
@@ -22,7 +24,7 @@ public class GenerableButton : MonoBehaviour, IPointerUpHandler
     {
         if(OnMouseUp != null)
         {
-            OnMouseUp(buttonData);
+            OnMouseUp(this);
         }
     }
 

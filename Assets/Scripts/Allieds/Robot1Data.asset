@@ -22,12 +22,11 @@ MonoBehaviour:
   unityType: 0
   attackType: 1
   targetType: 1
-  energy: 20
   cost: 5
   attackRate: 3
   damagePerAttack: 3
   attackRange: 2
   visualRange: 10
-  hitPoints: 3
+  hitPoints: 20
   attackClip: {fileID: 0}
   dieClip: {fileID: 0}

@@ -22,7 +22,7 @@ MonoBehaviour:
   unityType: 1
   attackType: 1
   targetType: 1
-  energy: 20
+  energy: 40
   cost: 5
   attackRate: 3
   damagePerAttack: 3

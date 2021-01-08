@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 
 public static class UtilLag
@@ -51,4 +52,6 @@ public static class UtilLag
 
         return n1 * n1 + n2 * n2;
     }
+
+    
 }

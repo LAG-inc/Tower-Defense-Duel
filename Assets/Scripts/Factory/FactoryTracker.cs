@@ -26,7 +26,9 @@ public class FactoryTracker : MonoBehaviour
         if (FactoryTracker.GetActiveTiles().Contains(tile))
         {
             // TODO: pass game object to have the reference
-            _currentFactory?.GenerateUnit(hit.collider.transform.position);
+            //_currentFactory?.GenerateUnit(hit.collider.transform.position);
+            if (_currentFactory != null)
+                StartCoroutine(_currentFactory.GenerateUnit(hit.collider.transform.position));
             _canPlaceUnit = false;
         }
     }

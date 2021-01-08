@@ -6,13 +6,12 @@ public class ThinkingGenerable : Generable
     [HideInInspector] public States state = States.Generating;
     [HideInInspector] public AttackType attackType = AttackType.Ranged;
     [HideInInspector] public ThinkingGenerable target;
-    [HideInInspector] public HealthBar healthBar;
+    [HideInInspector] public Bar bar;
     [HideInInspector] public float hitPoints; //Cuando las unidades sufren daño, ellos pierden hitPoints
     [HideInInspector] public float attackRange;
     [HideInInspector] public float attackRate; //Tiempo entre cada ataque 
     [HideInInspector] public float lastBlowTime = -1000f;
     [HideInInspector] public float damage;
-    [HideInInspector] public float energy;
     [HideInInspector] public int cost;
     [HideInInspector] public float creationTime;
     [HideInInspector] public float deployTime;
