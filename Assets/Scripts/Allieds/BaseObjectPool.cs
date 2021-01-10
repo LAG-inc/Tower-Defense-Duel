@@ -54,7 +54,7 @@ public class BaseObjectPool : ScriptableObject
     /// Return and obj to the que
     /// </summary>
     /// <param name="gameObject"></param>
-    private void EnqueueObj(GameObject gameObject)
+    public void EnqueueObj(GameObject gameObject)
     {
         _objects.Enqueue(gameObject);
     }

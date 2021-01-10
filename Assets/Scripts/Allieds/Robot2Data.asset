@@ -18,16 +18,15 @@ MonoBehaviour:
   alternatePrefab: {fileID: 0}
   sprite: {fileID: 21300000, guid: 0be4cc187e3b9eb429dbb1caa84ba7c0, type: 3}
   creationTime: 5
-  deployTime: 2
+  deployTime: 0
   unityType: 1
   attackType: 1
   targetType: 1
-  energy: 40
   cost: 5
   attackRate: 3
   damagePerAttack: 3
   attackRange: 2
   visualRange: 10
-  hitPoints: 3
+  hitPoints: 15
   attackClip: {fileID: 0}
   dieClip: {fileID: 0}

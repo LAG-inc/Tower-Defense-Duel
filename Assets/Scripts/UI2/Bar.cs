@@ -9,8 +9,9 @@ public class Bar : MonoBehaviour
     private float originalHP;
     private float currentHP;
     private Transform transformToFollow;
+    private bool isHidden = true;
 
-	private Color red = new Color32(252, 35, 13, 255);
+    private Color red = new Color32(252, 35, 13, 255);
 	private Color blue = new Color32(31, 132, 255, 255);
 
     public void Initialise(GameObject obj)
@@ -49,6 +50,11 @@ public class Bar : MonoBehaviour
 
     public void SetHealth(float newHP)
     {
+        if (isHidden)
+        {
+            wholeWidget.SetActive(true);
+            isHidden = false;
+        }
         float ratio = 0f;
         if(newHP > 0f)
         {

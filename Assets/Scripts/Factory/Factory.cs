@@ -27,7 +27,10 @@ public class Factory : MonoBehaviour
     public void PrepareUnitGeneration(GenerableButton button)
     {
         _buttonPressed = button;
-        //_creationTime = _buttonPressedData.generablesData[0].creationTime;
+        if (_buttonPressed.bar)
+        {
+            return;
+        }
         CancelUnit = false;
         FactoryTracker.SetCanPlaceUnit(true);
     }
@@ -38,6 +41,7 @@ public class Factory : MonoBehaviour
 
         GenerableButtonData bData = _buttonPressed.GetButtonData();
 
+        //Timer para el tiempo de creacion
         yield return StartCoroutine(TimerBar(bData.generablesData[0].creationTime, _buttonPressed));
 
         if (CancelUnit) yield break;
@@ -53,6 +57,7 @@ public class Factory : MonoBehaviour
         CheckGenerableButtonAvailability();
         _canGenerateUnit = _currentNumberUnits == maxNumberUnits ? false : true;
 
+        //Timer para la 'energia' del aliado
         yield return StartCoroutine(TimerBar(bData.generablesData[0].hitPoints, _unitToGenerate.GetComponent<ThinkingGenerable>()));
     }
 
@@ -142,21 +147,36 @@ public class Factory : MonoBehaviour
                 //RemovePlaceableFromList(u);
                 u.OnDealDamage -= OnGenerableDealtDamage;
                 //u.OnProjectileFired -= OnProjectileFired;
-                //UIManager.RemoveHealthUI(u);
-                StartCoroutine(Dispose(u));
+                UIManager.SI.RemoveBar(u);
+                StartCoroutine(DisposeUnit(u));
                 break;
         }
     }
 
-    private IEnumerator Dispose(ThinkingGenerable g)
+    private IEnumerator DisposeUnit(Unit g)
     {
-        yield return new WaitForSeconds(3f);
+        //time for animation 
+        yield return new WaitForSeconds(0f);
 
-        Destroy(g.gameObject);
+        g.gameObject.SetActive(false);
+
+        switch (g.GetUnitType())
+        {
+            case Unit.UnitType.Robot1:
+                PoolManager.SI.GetRobot1Pool().EnqueueObj(g.gameObject);
+                break;
+            case Unit.UnitType.Robot2:
+                PoolManager.SI.GetRobot2Pool().EnqueueObj(g.gameObject);
+                break;
+            case Unit.UnitType.Robot3:
+                break;
+            default:
+                break;
+        }
     }
 
     //No estoy seguro si deberia ir en este script
-    public IEnumerator TimerBar(float time, dynamic obj)
+    public IEnumerator TimerBar(float time, GenerableButton obj)
     {
         UIManager.SI.AddBar(obj);
 
@@ -172,5 +192,18 @@ public class Factory : MonoBehaviour
         UIManager.SI.RemoveBar(obj);
     }
 
-    
+    public IEnumerator TimerBar(float time, ThinkingGenerable obj)
+    {
+        for (float i = time * 10; i > 0; i--)
+        {
+            if (CancelUnit) break;
+
+            obj.bar.SetHealth(obj.SufferDamage(0.1f));
+
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+        
+    }
+
+
 }
