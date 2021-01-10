@@ -104,6 +104,7 @@ public class ThinkingGenerable : Generable
     {
         hitPoints -= amount;
         //Debug.Log("Suffering damage, new health: " + hitPoints, gameObject);
+
         if (state != States.Dead
             && hitPoints <= 0f)
         {

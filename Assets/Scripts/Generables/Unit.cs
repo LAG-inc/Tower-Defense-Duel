@@ -2,25 +2,7 @@
 
 public class Unit : ThinkingGenerable
 {
-    //TODO: Vamos a utilizar los eventos que ellos hicieron, concretamente el EventManager (Dani
-    // ya lo uso por lo tanto puedo guiarme por alli)
-
-    //TODO el primer paso es crear la pool personalizable de forma que de alli pueda 
-    // sacar todos mis aliados y enemigos ##COMPLETADO##
-
-    //TODO: luego debo conectar mi tipo de unidad 
-    // con la que el jugador clico en la fabrica, luego en el metodo Factory.GenerateUnit 
-    // debo activar mi unidad en la posicion que ese metodo me provee y luego ##COMPLETADO##
-
-    // ya empieza el cooldown y la parte de como va a atacar el aliado
-
-    //Data coming from the PlaceableData
-
-    //TODO: Revisar si la List de ActiveTiles realmente esta guardando solo tiles activos, revisar
-    //Con el debugger de VS
-
-    //TODO: Plantear cambiar el script monoBeheavior de Factory a un ScriptableObject de forma que
-    //se puedan crear distintos tipos de fabricas
+    
 
     //private float speed;
 
@@ -64,6 +46,8 @@ public class Unit : ThinkingGenerable
         attackAudioClip = gData.attackClip;
 
         state = States.Idle;
+
+        UIManager.SI.AddBar(this);
     }
 
     public override void SetTarget(ThinkingGenerable t)
@@ -110,6 +94,11 @@ public class Unit : ThinkingGenerable
     {
         base.Die();
 
-        animator.SetTrigger("IsDead");
+        //animator.SetTrigger("IsDead");
+    }
+
+    public UnitType GetUnitType()
+    {
+        return uType;
     }
 }
