@@ -9,8 +9,8 @@ public class FactoryInteractive : MonoBehaviour
     [SerializeField] private Canvas ui;
 
     [Header("Factory range")]
-    [SerializeField, Range(2f, 10f)] private float _rangeX = 2;
-    [SerializeField, Range(2f, 10f)] private float _rangeY = 2;
+    [SerializeField, Range(2.0f, 10.0f)] private float _rangeX = 2.0f;
+    [SerializeField, Range(2.0f, 10.0f)] private float _rangeY = 2.0f;
 
     [Header("Colors")]
     [SerializeField] private Color focusColor;
