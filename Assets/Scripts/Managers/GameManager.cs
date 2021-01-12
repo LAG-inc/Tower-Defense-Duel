@@ -34,5 +34,5 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         OnPause = null;
-    }
+    }    
 }

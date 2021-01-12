@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2617f5d60e2b56418b0482b1d7cc8e2, type: 3}
+  m_Name: Robot1Data
+  m_EditorClassIdentifier: 
+  gType: 0
+  associatedPrefab: {fileID: 1214812135869692055, guid: 447bc6bea672d604784046a4d5e83ba6,
+    type: 3}
+  alternatePrefab: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 2e8953c93cbca38429a9958166b35cf5, type: 3}
+  creationTime: 3
+  deployTime: 0
+  unityType: 0
+  attackType: 1
+  targetType: 1
+  cost: 5
+  attackRate: 3
+  damagePerAttack: 3
+  attackRange: 2
+  visualRange: 10
+  hitPoints: 10
+  attackClip: {fileID: 0}
+  dieClip: {fileID: 0}

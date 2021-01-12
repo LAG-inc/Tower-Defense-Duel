@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d3cd7f5fa11254da4b343001118628, type: 3}
+  m_Name: Robot1Pool
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1214812135869692055, guid: 447bc6bea672d604784046a4d5e83ba6, type: 3}
+  amount: 5
