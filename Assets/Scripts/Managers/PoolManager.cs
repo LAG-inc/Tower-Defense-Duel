@@ -16,7 +16,7 @@ public class PoolManager : MonoBehaviour
     {
         _robot1Pool.FillQueue();
         _robot2Pool.FillQueue();
-        _alien1Pool.FillQueue();
+        //_alien1Pool.FillQueue();
     }
 
     // Start is called before the first frame update
