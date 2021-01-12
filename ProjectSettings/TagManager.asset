@@ -51,3 +51,6 @@ TagManager:
   - name: Enemies-Player
     uniqueID: 864064269
     locked: 0
+  - name: UI-WorldSpace
+    uniqueID: 89644977
+    locked: 0

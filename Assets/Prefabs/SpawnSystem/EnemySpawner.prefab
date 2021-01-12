@@ -62,7 +62,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5e80a4682741d18459de1e81146c90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basePrefab: {fileID: 0}
+  basePrefab: {fileID: 7107555057184998397, guid: a4fac1ea9c8387240962159457b011a8,
+    type: 3}
   enemyPoints:
   - {fileID: 0}
   - {fileID: 0}
