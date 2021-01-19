@@ -11,11 +11,14 @@ public class PoolManager : MonoBehaviour
     [Header("Enemies")]
     [SerializeField] private BaseObjectPool _alien1Pool;
 
+    [Header("Common Objects")]
+    [SerializeField] private BaseObjectPool _bulletPool;
 
     private void Awake()
     {
         _robot1Pool.FillQueue();
         _robot2Pool.FillQueue();
+        _bulletPool.FillQueue();
         //_alien1Pool.FillQueue();
     }
 
@@ -35,4 +38,8 @@ public class PoolManager : MonoBehaviour
         return _robot2Pool;
     }
 
+    public BaseObjectPool GetBulletPool()
+    {
+        return _bulletPool;
+    }
 }

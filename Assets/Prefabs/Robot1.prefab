@@ -101,17 +101,17 @@ MonoBehaviour:
   state: 0
   attackType: 1
   target: {fileID: 0}
-  healthBar: {fileID: 0}
+  bar: {fileID: 0}
   hitPoints: 0
   attackRange: 0
   attackRate: 0
   lastBlowTime: -1000
   damage: 0
-  energy: 0
   cost: 0
   creationTime: 0
   deployTime: 0
   attackAudioClip: {fileID: 0}
   timeToActNext: 0
-  projectilePrefab: {fileID: 0}
-  projectileSpawnPoint: {fileID: 0}
+  projectilePrefab: {fileID: 7321369020715352307, guid: ea486f5a056b5214ea13846617bd626e,
+    type: 3}
+  projectileSpawnPoint: {fileID: 3964137824323042674}

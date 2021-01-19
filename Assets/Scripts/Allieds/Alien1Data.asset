@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2617f5d60e2b56418b0482b1d7cc8e2, type: 3}
-  m_Name: Robot1Data
+  m_Name: Alien1Data
   m_EditorClassIdentifier: 
   gType: 0
-  associatedPrefab: {fileID: 1214812135869692055, guid: 447bc6bea672d604784046a4d5e83ba6,
+  associatedPrefab: {fileID: 1214812135869692055, guid: ce25a0b3babce4940bbf47d3d0d6c3cd,
     type: 3}
   alternatePrefab: {fileID: 0}
-  sprite: {fileID: 21300000, guid: 2e8953c93cbca38429a9958166b35cf5, type: 3}
-  creationTime: 1
+  sprite: {fileID: 21300000, guid: 0be4cc187e3b9eb429dbb1caa84ba7c0, type: 3}
+  creationTime: 5
   deployTime: 0
-  unitFaction: 0
-  unityType: 0
+  unitFaction: 1
+  unityType: 1
   attackType: 1
   targetType: 1
   cost: 5
   attackRate: 3
   damagePerAttack: 3
-  attackRange: 30
-  hitPoints: 30.3
+  attackRange: 10
+  hitPoints: 50
   attackClip: {fileID: 0}
   dieClip: {fileID: 0}

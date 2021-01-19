@@ -49,7 +49,7 @@ public class Factory : MonoBehaviour
         for (int i = 0; i < bData.generablesData.Length; i++)
         {
             GenerableData gDataRef = bData.generablesData[i];
-            SetupGenerable(ref _unitToGenerate, gDataRef);
+            SetupGenerable(ref _unitToGenerate, gDataRef, gDataRef.unitFaction);
             _unitToGenerate.transform.position = location + bData.relativeOffsets[i];
             _unitToGenerate.SetActive(true);
         }
@@ -74,7 +74,7 @@ public class Factory : MonoBehaviour
         }
     }
 
-    private void SetupGenerable(ref GameObject go, GenerableData gDataRef)
+    private void SetupGenerable(ref GameObject go, GenerableData gDataRef, Generable.Faction gFaction)
     {
         switch (gDataRef.gType)
         {
@@ -96,10 +96,10 @@ public class Factory : MonoBehaviour
                 }
 
                 Unit uScript = go.GetComponent<Unit>();
-                uScript.Activate(gDataRef); 
+                uScript.Activate(gFaction, gDataRef); 
                 uScript.OnDealDamage += OnGenerableDealtDamage;
-                //uScript.OnProjectileFired += OnProjectileFired;
-                //AddPlaceableToList(uScript); 
+                uScript.OnProjectileFired += OnProjectileFired;
+                GameManager.Instance.AddPlaceableToList(uScript); 
                 //UIManager.AddHealthUI(uScript);
 
                 break;
@@ -124,17 +124,23 @@ public class Factory : MonoBehaviour
         }
     }
 
-    //private void OnProjectileFired(ThinkingGenerable g)
-    //{
-    //    Vector3 adjTargetPos = g.target.transform.position;
-    //    adjTargetPos.y = 1.5f;
-    //    Quaternion rot = Quaternion.LookRotation(adjTargetPos - g.projectileSpawnPoint.position);
+    private void OnProjectileFired(ThinkingGenerable g)
+    {
+        Vector3 adjTargetPos = g.target.transform.position;
+        Vector3 vectorToTarget = adjTargetPos - g.projectileSpawnPoint.position;
 
-    //    Projectile prj = Instantiate<GameObject>(g.projectilePrefab, g.projectileSpawnPoint.position, rot).GetComponent<Projectile>();
-    //    prj.target = g.target;
-    //    prj.damage = g.damage;
-    //    allProjectiles.Add(prj);
-    //}
+        Quaternion rot = Quaternion.LookRotation(Vector3.forward, vectorToTarget);
+
+        GameObject prj = PoolManager.SI.GetBulletPool().ExtractFromQueue();
+        prj.transform.position = g.projectileSpawnPoint.position;
+        prj.transform.rotation = rot;
+
+        prj.GetComponent<Projectile>().target = g.target;
+        prj.GetComponent<Projectile>().damage = g.damage;
+
+        prj.gameObject.SetActive(true);
+        GameManager.Instance.GetAllProjectiles().Add(prj.GetComponent<Projectile>());
+    }
 
     private void OnGenerableDead(Generable g)
     {
@@ -146,7 +152,7 @@ public class Factory : MonoBehaviour
                 Unit u = (Unit)g;
                 //RemovePlaceableFromList(u);
                 u.OnDealDamage -= OnGenerableDealtDamage;
-                //u.OnProjectileFired -= OnProjectileFired;
+                u.OnProjectileFired -= OnProjectileFired;
                 UIManager.SI.RemoveBar(u);
                 StartCoroutine(DisposeUnit(u));
                 break;
