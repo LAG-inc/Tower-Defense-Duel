@@ -10,8 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d5316f420024bde902941acbc2bb2a1, type: 3}
-  m_Name: Enemy
+  m_Name: Enemy 1
   m_EditorClassIdentifier: 
-  enemySprite: {fileID: 21300000, guid: e15469f3e541e7b4ebb5b5a1123156b4, type: 3}
+  enemySprite: {fileID: 21300000, guid: 2e8953c93cbca38429a9958166b35cf5, type: 3}
+  animator: {fileID: 2577757124103593122, guid: 0c3535cfea412d442a070da3bfc99ac8,
+    type: 3}
   life: 4
   damage: 5
+  points: 0

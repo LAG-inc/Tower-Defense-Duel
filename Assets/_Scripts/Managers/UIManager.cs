@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -22,8 +21,9 @@ public class UIManager : MonoBehaviour
 
     public void AddBar(dynamic obj)
     {
-        GameObject newUIObject = Instantiate<GameObject>(barPrefab, obj.transform.position, Quaternion.identity, _barContainer);
-        obj.bar = newUIObject.GetComponent<Bar>(); 
+        GameObject newUIObject =
+            Instantiate<GameObject>(barPrefab, obj.transform.position, Quaternion.identity, _barContainer);
+        obj.bar = newUIObject.GetComponent<Bar>();
 
         obj.bar.Initialise(obj.gameObject);
 

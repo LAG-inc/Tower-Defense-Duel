@@ -8,4 +8,5 @@ public class EnemyScriptable : ScriptableObject
     public Animator animator;
     public float life;
     public float damage;
-}
+    public float points;
+} 

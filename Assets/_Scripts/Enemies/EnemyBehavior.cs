@@ -8,7 +8,6 @@ public class EnemyBehavior : MonoBehaviour
 {
     private static float _speed;
 
-    private EnemyPool _enemyPool;
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
 
@@ -81,7 +80,7 @@ public class EnemyBehavior : MonoBehaviour
     /// Set the current points pattern of enemy
     /// </summary>
     /// <param name="lEnemyPoints"> Set the instance enemy pattern points</param>
-    public void SetEnemyPoints(List<Vector3> lEnemyPoints)
+    public void SetEnemyPointsColliders(List<Vector3> lEnemyPoints)
     {
         _enemyPoints = lEnemyPoints;
     }
@@ -113,8 +112,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_enemyPool != null)
-            _enemyPool.EnqueueObj(gameObject);
+        PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
     }
 
     /// <summary>
@@ -128,12 +126,11 @@ public class EnemyBehavior : MonoBehaviour
     }
 
 
-    public void SetComponents(float lLife, Sprite sprite, float attackPower, EnemyPool pool, Animator animator)
+    public void SetComponents(float lLife, Sprite sprite, float attackPower, Animator animator)
     {
         life = lLife;
         _spriteRenderer.sprite = sprite;
         damage = attackPower;
-        _enemyPool = pool;
         _animator = animator;
     }
 

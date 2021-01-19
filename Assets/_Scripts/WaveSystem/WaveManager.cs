@@ -14,8 +14,6 @@ public class WaveManager : MonoBehaviour
         _currentLvl = PlayerPrefs.HasKey("Wave") ? PlayerPrefs.GetInt("Wave") : 1;
 
         ConfigureNewPhase();
-
-        Debug.Log(PlayerPrefs.GetInt("Wave"));
     }
 
     /// <summary>
@@ -26,7 +24,7 @@ public class WaveManager : MonoBehaviour
         if (!test)
         {
             var num = _currentLvl % 10 == 0
-                ? UtilLag.Fibonacci(9) * multiplier + _currentLvl / 10 //  + spawnFactor * lvl
+                ? UtilLag.Fibonacci(10) * multiplier + _currentLvl / 10 //  + spawnFactor * lvl
                 : UtilLag.Fibonacci(_currentLvl % 10) * multiplier; //  + spawnFactor * lvl
 
             EnemyGenerator.ChangeEnemiesPhase(num);
