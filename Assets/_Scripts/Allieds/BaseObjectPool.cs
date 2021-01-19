@@ -50,14 +50,12 @@ public class BaseObjectPool : ScriptableObject
     /// <returns></returns>
     public GameObject ExtractFromQueue()
     {
-        if (_objects.Count < 2)
+        if (_objects.Count < 4)
         {
             FillQueue(false);
         }
 
         var obj = _objects.Dequeue();
-
-        obj.SetActive(true);
 
         return obj;
     }

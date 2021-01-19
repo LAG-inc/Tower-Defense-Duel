@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using System.Linq;
+using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -12,19 +13,31 @@ public class EnemyBehavior : MonoBehaviour
     private Rigidbody2D _rigidbody;
 
     //Health system?
-    [SerializeField, Range(5, 30)] private float life;
-    [SerializeField, Range(5, 20)] private float damage;
-    [SerializeField, Range(5, 20)] private float attackeSpeed;
+    [SerializeField, UnityEngine.Range(5, 30)]
+    private float life;
 
-    private List<Vector3> _enemyPoints = new List<Vector3>();
+    [SerializeField, UnityEngine.Range(5, 20)]
+    private float damage;
+
+    [SerializeField, UnityEngine.Range(5, 20)]
+    private float attackeSpeed;
+
     private int _currentTargetIndex;
+
     private Animator _animator;
+
     private Vector3 _target;
 
     //Set true when die animation finish (Machine State)
     public bool readyToDeactivate;
 
     private bool _attacking;
+
+    private static List<Collider2D> _enemyPointsColliders = new List<Collider2D>();
+    private static List<EnemyPoint> _enemyPointsScripts = new List<EnemyPoint>();
+
+
+    private List<Vector3> _enemyPoints = new List<Vector3>();
 
 
     private static readonly int Attacking = Animator.StringToHash("Attacking");
@@ -79,10 +92,12 @@ public class EnemyBehavior : MonoBehaviour
     /// <summary>
     /// Set the current points pattern of enemy
     /// </summary>
-    /// <param name="lEnemyPoints"> Set the instance enemy pattern points</param>
-    public void SetEnemyPointsColliders(List<Vector3> lEnemyPoints)
+    /// <param name="enemyPointsScripts"></param>
+    /// <param name="enemyPointsCollider"> Set the instance enemy pattern points</param>
+    public static void SetEnemyPoints(List<EnemyPoint> enemyPointsScripts, List<Collider2D> enemyPointsCollider)
     {
-        _enemyPoints = lEnemyPoints;
+        _enemyPointsScripts = enemyPointsScripts;
+        _enemyPointsColliders = enemyPointsCollider;
     }
 
     /// <summary>
@@ -107,13 +122,10 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnEnable()
     {
+        AssignEnemyPattern();
         SetAnimValues();
     }
 
-    private void OnDisable()
-    {
-        PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
-    }
 
     /// <summary>
     /// Coroutine which allows disable the gameobject depending its current animation state
@@ -122,6 +134,7 @@ public class EnemyBehavior : MonoBehaviour
     private IEnumerator DieBehavior()
     {
         yield return new WaitUntil(() => readyToDeactivate); // OnAnimationFinished
+        PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
         gameObject.SetActive(false);
     }
 
@@ -138,5 +151,31 @@ public class EnemyBehavior : MonoBehaviour
     private void SetAnimValues()
     {
         _animator.SetBool(Attacking, false);
+    }
+
+
+    private void AssignEnemyPattern()
+    {
+        var currentEnemyPoints = new List<Vector3>();
+
+
+        for (var index = 0; index < _enemyPointsColliders.Count; index++)
+        {
+            var point = _enemyPointsColliders[index];
+
+            if (_enemyPointsScripts[index].direction == Direction.Vertical)
+            {
+                float randomY = Random.Range(point.bounds.min.y, point.bounds.max.y);
+                currentEnemyPoints.Add(new Vector3(point.transform.position.x, randomY));
+            }
+
+            else
+            {
+                float randomX = Random.Range(point.bounds.min.x, point.bounds.max.x);
+                currentEnemyPoints.Add(new Vector3(randomX, point.transform.position.y));
+            }
+        }
+
+        _enemyPoints = currentEnemyPoints;
     }
 }
