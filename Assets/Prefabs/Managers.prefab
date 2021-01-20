@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 2836955382029057813}
   - component: {fileID: 2836955382029057814}
   - component: {fileID: 2836955382029057815}
+  - component: {fileID: 1031910437}
+  - component: {fileID: 3283627346881164726}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -58,6 +60,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba851c9d76a1685478f5e3fa82e24007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allPlayers: []
+  allOpponents: []
 --- !u!114 &2836955382029057814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,3 +87,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplier: 3
+  test: 1
+  enemiesPerTestPhase: 500
+  speedTest: 0.5
+--- !u!114 &1031910437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836955382029057802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b16ebbe7b4c0ea448bdd769cc4f5a732, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _robot1Pool: {fileID: 11400000, guid: 341f081eb01931e4386c6bb6ef32b8e9, type: 2}
+  _robot2Pool: {fileID: 11400000, guid: 8a442668f5187cb40b630022b6965b49, type: 2}
+  _alien1Pool: {fileID: 0}
+  _bulletPool: {fileID: 11400000, guid: 073f8ee7bfd993549b13a63f287864d1, type: 2}
+  objectPools:
+  - {fileID: 11400000, guid: f6ee84c56697be3438a653846d2a40ea, type: 2}
+--- !u!114 &3283627346881164726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836955382029057802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b020c943bc25a2747a503f16495efbe8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barPrefab: {fileID: 2299034459240315198, guid: 509bcf174b0f3ba4891aa6a98fc548d2,
+    type: 3}
+  gameOverUI: {fileID: 0}
