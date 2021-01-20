@@ -133,6 +133,7 @@ public class Factory : MonoBehaviour
 
         GameObject prj = PoolManager.SI.GetBulletPool().ExtractFromQueue();
         prj.transform.position = g.projectileSpawnPoint.position;
+        prj.GetComponent<Projectile>().SetInitialPosition(g.projectileSpawnPoint.position);
         prj.transform.rotation = rot;
 
         prj.GetComponent<Projectile>().target = g.target;
