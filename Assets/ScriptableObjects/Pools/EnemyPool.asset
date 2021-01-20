@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d3cd7f5fa11254da4b343001118628, type: 3}
+  m_Name: EnemyPool
+  m_EditorClassIdentifier: 
+  id: 1
+  prefab: {fileID: 7107555057184998397, guid: a4fac1ea9c8387240962159457b011a8, type: 3}
+  amount: 40
