@@ -62,19 +62,16 @@ public class ThinkingGenerable : Generable
     //Animation event hooks
     public void DealDamage()
     {
-        //only melee units play audio when the attack deals damage
         if (attackType == AttackType.Melee)
-            //audioSource.PlayOneShot(attackAudioClip, 1f);
-            Debug.Log("Aqui deberia sonar cuando inflinge daño");
+
+            //Aqui se pueden reproducir los audios cuando hace daño
 
             if (OnDealDamage != null)
                 OnDealDamage(this);
     }
     public void FireProjectile()
     {
-        //ranged units play audio when the projectile is fired
-        //audioSource.PlayOneShot(attackAudioClip, 1f);
-        Debug.Log("Aqui deberia sonar cuando dispara un proyectil");
+        //Aqui se puede reproducir los audios de disparar proyectil
 
         if (OnProjectileFired != null)
             OnProjectileFired(this);
@@ -87,7 +84,6 @@ public class ThinkingGenerable : Generable
 
     protected void TargetIsDead(Generable p)
     {
-        //Debug.Log("My target " + p.name + " is dead", gameObject);
         state = States.Idle;
 
         target.OnDie -= TargetIsDead;
@@ -122,8 +118,7 @@ public class ThinkingGenerable : Generable
     protected virtual void Die()
     {
         state = States.Dead;
-        //audioSource.pitch = Random.Range(.9f, 1.1f);
-        //audioSource.PlayOneShot(dieAudioClip, 1f);
+        //Aqui se puede reproducir audio de muerte
 
         if (OnDie != null)
             OnDie(this);

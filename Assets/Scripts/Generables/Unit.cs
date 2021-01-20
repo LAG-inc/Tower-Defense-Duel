@@ -25,14 +25,14 @@ public class Unit : ThinkingGenerable
         Robot3
     }
 
-    public void Activate(GenerableData gData)
+    public void Activate(Faction gFaction, GenerableData gData)
     {
         uType = gData.unityType; //Para identificar la pool
         GetComponent<SpriteRenderer>().sprite = gData.sprite;
         creationTime = gData.creationTime;
         deployTime = gData.deployTime;
 
-        //faction = gFaction;
+        faction = gFaction;
         hitPoints = gData.hitPoints;
         targetType = gData.targetType;
         attackRange = gData.attackRange;
@@ -63,7 +63,7 @@ public class Unit : ThinkingGenerable
 
         base.Seek();
 
-        animator.SetBool("IsMoving", true);
+        //animator.SetBool("IsMoving", true);
     }
 
     //Unit has gotten to its target. This function puts it in "attack mode", but doesn't delive any damage (see DealBlow)
@@ -71,7 +71,7 @@ public class Unit : ThinkingGenerable
     {
         base.StartAttack();
 
-        animator.SetBool("IsMoving", false);
+        //animator.SetBool("IsMoving", false);
     }
 
     //Starts the attack animation, and is repeated according to the Unit's attackRatio
@@ -79,15 +79,16 @@ public class Unit : ThinkingGenerable
     {
         base.DealBlow();
 
-        animator.SetTrigger("Attack");
-        transform.forward = (target.transform.position - transform.position).normalized; //turn towards the target
+        //animator.SetTrigger("Attack");
+        //TODO descomentar y acomodar
+        //transform.forward = (target.transform.position - transform.position).normalized; //turn towards the target
     }
 
     public override void Stop()
     {
         base.Stop();
 
-        animator.SetBool("IsMoving", false);
+        //animator.SetBool("IsMoving", false);
     }
 
     protected override void Die()

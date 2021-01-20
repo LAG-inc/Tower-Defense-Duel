@@ -14,17 +14,15 @@ public class GenerableData : ScriptableObject
     [Range(0, 5)] public float deployTime;
 
     [Header("Units")]
+    public Generable.Faction unitFaction;
     public Unit.UnitType unityType;
     public ThinkingGenerable.AttackType attackType = ThinkingGenerable.AttackType.Ranged;
     public Generable.GenerableTarget targetType = Generable.GenerableTarget.Unit;
     [Range(0, 5)] public int cost;
-    [Range(0, 5)] public float attackRate = 1f; 
+    [Range(0, 100)] public float attackRate = 1f; 
     [Range(0, 5)] public float damagePerAttack = 2f; 
-    [Range(0, 5)] public float attackRange = 1f;
-    public float visualRange;
+    [Range(10, 30)] public float attackRange = 10f;
     [Range(0, 50)] public float hitPoints = 10f;
     public AudioClip attackClip, dieClip;
-
-    //public float speed = 5f; 
 
 }

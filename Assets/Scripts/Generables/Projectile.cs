@@ -4,12 +4,12 @@ public class Projectile : MonoBehaviour
 {
 	[HideInInspector] public ThinkingGenerable target;
 	[HideInInspector] public float damage;
-	private float speed = 3f;
+	private float speed = 1f;
 	private float progress = 0f;
-	private Vector3 offset = new Vector3(0f, 1.2f, 0f);
+	private Vector3 offset = new Vector3(0f, 0f, 0f);
 	private Vector3 initialPosition;
 
-	private void Awake()
+	private void OnEnable()
 	{
 		initialPosition = transform.position;
 	}
@@ -21,4 +21,9 @@ public class Projectile : MonoBehaviour
 
 		return progress;
 	}
+
+    public void SetInitialPosition(Vector3 initialPosition)
+    {
+        this.initialPosition = initialPosition;
+    }
 }
