@@ -8,28 +8,30 @@ public class RpsManager : MonoBehaviour
     /// <summary>
     /// Each Level Will have between 15-20 phases, these are gonna be divided in three stages. 
     /// </summary>
-    [SerializeField] private List<EnemyScriptable> enemiesAvalibleStage1 = new List<EnemyScriptable>();
-
-    [SerializeField] private List<EnemyScriptable> enemiesAvalibleStage2 = new List<EnemyScriptable>();
-    [SerializeField] private List<EnemyScriptable> enemiesAvalibleStage3 = new List<EnemyScriptable>();
-
     private LvlRps _currentLvl;
+
     private float _currentPointsPhase;
     private int _currentPhase;
 
-    private static List<EnemyGenerator> _enemyGenerators = new List<EnemyGenerator>();
+    private List<EnemyGenerator> _enemyGenerators = new List<EnemyGenerator>();
 
     public static RpsManager SingleInstance;
 
 
+    private int[] _phasesPerStage = new int[3];
+
+    private int _currentStage;
+
     private void Awake()
     {
-        _currentPhase = 1;
-        _enemyGenerators = null;
         if (SingleInstance == null)
         {
             SingleInstance = this;
         }
+
+        _currentStage = 1;
+        _currentPhase = 1;
+        _enemyGenerators.Clear();
     }
 
 
@@ -37,19 +39,22 @@ public class RpsManager : MonoBehaviour
     {
         _currentLvl = LvlHelper.SingleInstance.GetNextLvl();
         AssignLevelConfiguration();
+        CalculatePhasesPerStage();
     }
 
     private void AssignLevelConfiguration()
     {
         _currentPointsPhase = _currentLvl.basePoints;
-        enemiesAvalibleStage1 = _currentLvl.enemiesAvailableStage1;
-        enemiesAvalibleStage2 = _currentLvl.enemiesAvailableStage2;
-        enemiesAvalibleStage3 = _currentLvl.enemiesAvailableStage3;
     }
 
-    public static void AddGenerator(EnemyGenerator newGenerator)
+    public void AddGenerator(EnemyGenerator newGenerator)
     {
         _enemyGenerators.Add(newGenerator);
+    }
+
+    public void SubtractGenerator(EnemyGenerator generatorToSubtract)
+    {
+        _enemyGenerators.Remove(generatorToSubtract);
     }
 
 
@@ -57,27 +62,63 @@ public class RpsManager : MonoBehaviour
     /// It prepare the new phase for create enemies
     /// </summary>
     /// <returns></returns>
-    private void PreparePhase()
+    public void PreparePhase()
     {
-        CalculatePhasePoints();
+        if (_currentPhase > _currentLvl.phasesInLvl) return;
+
+
+        var enemiesAvailable = new List<EnemyScriptable>();
+
+        if (_currentPhase <= _currentStage * _phasesPerStage[_currentStage])
+        {
+            enemiesAvailable = _currentStage == 1 ? _currentLvl.enemiesAvailableStage1 :
+                _currentStage == 2 ? _currentLvl.enemiesAvailableStage2 : _currentLvl.enemiesAvailableStage3;
+        }
+
+        _currentPointsPhase = CalculatePhasePoints(_currentPhase);
+
         var pointsPerGenerator = (int) Math.Ceiling(_currentPointsPhase / _enemyGenerators.Count);
 
         foreach (var enemyGenerator in _enemyGenerators)
         {
             enemyGenerator.SetAvailablePoints(pointsPerGenerator);
+            enemyGenerator.SetEnemiesAvailable(enemiesAvailable);
         }
+
+        _currentPhase++;
     }
 
-    private void CalculatePhasePoints()
+    /// <summary>
+    /// Calculate How many points will a new phase
+    /// </summary>
+    private int CalculatePhasePoints(int currentPhase)
     {
         //CurrentPoints + CurrentPhase * WaveFactor + fibonacci(phase/2)
-        var form = _currentPointsPhase + _currentPhase * _currentLvl.waveFactor +
-                   UtilLag.Fibonacci(_currentPhase / 2 + 1);
-        _currentPointsPhase = form;
+        var form = _currentPointsPhase + currentPhase * _currentLvl.waveFactor +
+                   UtilLag.Fibonacci(currentPhase / 2 + 1);
+        return (int) form;
     }
 
     private void OnDisable()
     {
         _enemyGenerators.Clear();
+    }
+
+    /// <summary>
+    /// Calculate how many phases its gonna have each stage.
+    /// </summary>
+    private void CalculatePhasesPerStage()
+    {
+        var totalPhases = _currentLvl.phasesInLvl;
+        var basePhaseNum = (int) Math.Ceiling((float) totalPhases / 3);
+        _phasesPerStage[0] = basePhaseNum;
+        _phasesPerStage[1] = basePhaseNum * 2;
+        _phasesPerStage[2] = _currentLvl.phasesInLvl;
+    }
+
+
+    public bool IsAnotherPhase()
+    {
+        return _currentPhase != _currentLvl.phasesInLvl;
     }
 }

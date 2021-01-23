@@ -8,8 +8,6 @@ public enum Direction
 
 public class EnemyPoint : MonoBehaviour
 {
-    public Direction direction;
-
     [SerializeField] private int id;
     public int ID => id;
 }

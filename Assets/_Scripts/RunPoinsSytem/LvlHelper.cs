@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LvlHelper : MonoBehaviour
 {
-    private LvlRps _lvlSelected;
+    [SerializeField] private LvlRps lvlSelected;
     public static LvlHelper SingleInstance;
 
     private void Awake()
@@ -16,11 +16,11 @@ public class LvlHelper : MonoBehaviour
 
     public LvlRps GetNextLvl()
     {
-        return _lvlSelected;
+        return lvlSelected;
     }
 
     public void SetNewLevel(LvlRps newLvl)
     {
-        _lvlSelected = newLvl;
+        lvlSelected = newLvl;
     }
 }

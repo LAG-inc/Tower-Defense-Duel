@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,12 +13,11 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField, Tooltip("Constant time between enemies in seconds"), Range(0, 5)]
     private float spawnRate;
 
-    [SerializeField, Tooltip("Enemies prefabs")]
-    private List<EnemyScriptable> enemies = new List<EnemyScriptable>();
+    private List<EnemyScriptable> _enemies = new List<EnemyScriptable>();
 
     private float _currentSpawnTime;
 
-    private Collider2D _xPositionCollider;
+    private Collider2D _spawnZone;
 
     private static bool _canGenerate;
 
@@ -29,26 +29,24 @@ public class EnemyGenerator : MonoBehaviour
     {
         _canGenerate = false;
 
-        RpsManager.AddGenerator(this);
-
-
         _currentSpawnTime = 0;
 
         _enemyPool = PoolManager.SI.GetObjectPool(1);
 
-        _xPositionCollider = GetComponent<Collider2D>();
+        _spawnZone = GetComponent<Collider2D>();
     }
 
     private void Start()
     {
-        RpsManager.AddGenerator(this);
+        var a = this;
+        RpsManager.SingleInstance.AddGenerator(this);
     }
 
     private void Update()
     {
         if (!_canGenerate)
             return;
-
+        Debug.Log("YEAHHH I can generate Units!!!");
 
         if (_availablePoints <= 0)
         {
@@ -71,7 +69,7 @@ public class EnemyGenerator : MonoBehaviour
     {
         _countDebug++;
 
-        var currentEnemy = Random.Range(0, enemies.Count);
+        var currentEnemy = Random.Range(0, _enemies.Count);
 
         var enemy = _enemyPool.ExtractFromQueue();
 
@@ -81,16 +79,16 @@ public class EnemyGenerator : MonoBehaviour
 
         patternConfigurator.SetEnemyPoints(ref enemyBehavior);
 
-        enemyBehavior.SetComponents(enemies[currentEnemy].life, enemies[currentEnemy].enemySprite,
-            enemies[currentEnemy].damage
-            , enemies[currentEnemy].animator, enemies[currentEnemy].speed);
+        enemyBehavior.SetComponents(_enemies[currentEnemy].life, _enemies[currentEnemy].enemySprite,
+            _enemies[currentEnemy].damage
+            , _enemies[currentEnemy].animator, _enemies[currentEnemy].speed);
 
 
-        var randomPos = Random.Range(_xPositionCollider.bounds.min.x, _xPositionCollider.bounds.max.x);
+        var randomPos = Random.Range(_spawnZone.bounds.min.x, _spawnZone.bounds.max.x);
 
         enemy.transform.position = new Vector3(randomPos, transform.position.y);
 
-        _availablePoints -= enemies[currentEnemy].points;
+        _availablePoints -= _enemies[currentEnemy].points;
     }
 
 
@@ -102,5 +100,16 @@ public class EnemyGenerator : MonoBehaviour
     public static void StartGenerating()
     {
         _canGenerate = true;
+    }
+
+
+    public void SetEnemiesAvailable(List<EnemyScriptable> enemyScriptable)
+    {
+        _enemies = enemyScriptable;
+    }
+
+    private void OnDisable()
+    {
+        RpsManager.SingleInstance.SubtractGenerator(this);
     }
 }
