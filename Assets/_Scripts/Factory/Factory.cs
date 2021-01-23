@@ -21,7 +21,6 @@ public class Factory : MonoBehaviour
         {
             button.OnMouseUp += PrepareUnitGeneration;
         }
-
     }
 
     public void PrepareUnitGeneration(GenerableButton button)
@@ -96,10 +95,10 @@ public class Factory : MonoBehaviour
                 }
 
                 Unit uScript = go.GetComponent<Unit>();
-                uScript.Activate(gFaction, gDataRef); 
+                uScript.Activate(gFaction, gDataRef);
                 uScript.OnDealDamage += OnGenerableDealtDamage;
                 uScript.OnProjectileFired += OnProjectileFired;
-                GameManager.Instance.AddPlaceableToList(uScript); 
+                GameManager.Instance.AddPlaceableToList(uScript);
                 //UIManager.AddHealthUI(uScript);
 
                 break;
@@ -162,7 +161,7 @@ public class Factory : MonoBehaviour
 
     private IEnumerator DisposeUnit(Unit g)
     {
-        //time for animation 
+        //time for animation
         yield return new WaitForSeconds(0f);
 
         g.gameObject.SetActive(false);
@@ -209,8 +208,5 @@ public class Factory : MonoBehaviour
 
             yield return new WaitForSecondsRealtime(0.1f);
         }
-        
     }
-
-
 }
