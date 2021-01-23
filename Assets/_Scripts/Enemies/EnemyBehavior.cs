@@ -1,13 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class EnemyBehavior : MonoBehaviour
 {
-    private static float _speed;
+    private float _speed;
 
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
@@ -19,8 +17,6 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField, UnityEngine.Range(5, 20)]
     private float damage;
 
-    [SerializeField, UnityEngine.Range(5, 20)]
-    private float attackeSpeed;
 
     private int _currentTargetIndex;
 
@@ -31,7 +27,6 @@ public class EnemyBehavior : MonoBehaviour
     //Set true when die animation finish (Machine State)
     public bool readyToDeactivate;
 
-    private bool _attacking;
 
     private static List<Collider2D> _enemyPointsColliders = new List<Collider2D>();
     private static List<EnemyPoint> _enemyPointsScripts = new List<EnemyPoint>();
@@ -44,7 +39,6 @@ public class EnemyBehavior : MonoBehaviour
 
     private void Awake()
     {
-        _attacking = false;
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
@@ -53,15 +47,14 @@ public class EnemyBehavior : MonoBehaviour
     private void Start()
     {
         _currentTargetIndex = 0;
-        _target = _enemyPoints[_currentTargetIndex];
     }
 
     public void Update()
     {
-        if (_attacking) return;
+        if (_enemyPoints.Count <= 0) return;
 
-        if (Mathf.Abs(transform.position.x - _target.x) < 0.1f &&
-            Mathf.Abs(transform.position.y - _target.y) < 0.1f)
+        if (Mathf.Abs(transform.position.x - _target.x) < 0.2f &&
+            Mathf.Abs(transform.position.y - _target.y) < 0.2f)
         {
             ChangeTarget();
         }
@@ -69,8 +62,6 @@ public class EnemyBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_attacking) return;
-
         // if (_attacking) return;
         _rigidbody.MovePosition(_rigidbody.position +
                                 (Vector2) (_target - transform.position).normalized * (Time.deltaTime * _speed));
@@ -82,9 +73,14 @@ public class EnemyBehavior : MonoBehaviour
     private void ChangeTarget()
     {
         if (_currentTargetIndex == _enemyPoints.Count - 1)
-            _attacking = true;
-        else
-            _currentTargetIndex++;
+        {
+            Debug.Log("ATTACK THE BASE!!!!");
+            //replace with Attack base and die
+            Destroy(gameObject);
+            return;
+        }
+
+        _currentTargetIndex++;
 
         _target = _enemyPoints[_currentTargetIndex];
     }
@@ -94,7 +90,7 @@ public class EnemyBehavior : MonoBehaviour
     /// </summary>
     /// <param name="enemyPointsScripts"></param>
     /// <param name="enemyPointsCollider"> Set the instance enemy pattern points</param>
-    public static void SetEnemyPoints(List<EnemyPoint> enemyPointsScripts, List<Collider2D> enemyPointsCollider)
+    public void SetEnemyPoints(List<EnemyPoint> enemyPointsScripts, List<Collider2D> enemyPointsCollider)
     {
         _enemyPointsScripts = enemyPointsScripts;
         _enemyPointsColliders = enemyPointsCollider;
@@ -103,13 +99,7 @@ public class EnemyBehavior : MonoBehaviour
     /// <summary>
     /// Change the speed of all the enemies
     /// </summary>
-    /// <param name="speed"></param>
-    public static void ChangeSpeed(float speed)
-    {
-        _speed = speed;
-    }
-
-
+    /// <param name="damange"></param>
     public void RecieveDamage(float damange)
     {
         life -= damange;
@@ -122,7 +112,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnEnable()
     {
-        AssignEnemyPattern();
+        StartCoroutine(AssignEnemyPattern());
         SetAnimValues();
     }
 
@@ -133,14 +123,15 @@ public class EnemyBehavior : MonoBehaviour
     /// <returns></returns>
     private IEnumerator DieBehavior()
     {
-        yield return new WaitUntil(() => readyToDeactivate); // OnAnimationFinished
+        yield return new WaitUntil(() => readyToDeactivate); // OnAnimationFinished in charge of make it true
         PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
         gameObject.SetActive(false);
     }
 
 
-    public void SetComponents(float lLife, Sprite sprite, float attackPower, Animator animator)
+    public void SetComponents(float lLife, Sprite sprite, float attackPower, Animator animator, float speed)
     {
+        _speed = speed;
         life = lLife;
         _spriteRenderer.sprite = sprite;
         damage = attackPower;
@@ -154,8 +145,9 @@ public class EnemyBehavior : MonoBehaviour
     }
 
 
-    private void AssignEnemyPattern()
+    private IEnumerator AssignEnemyPattern()
     {
+        yield return new WaitUntil(() => _enemyPointsScripts.Count > 0);
         var currentEnemyPoints = new List<Vector3>();
 
 
@@ -163,17 +155,11 @@ public class EnemyBehavior : MonoBehaviour
         {
             var point = _enemyPointsColliders[index];
 
-            if (_enemyPointsScripts[index].direction == Direction.Vertical)
-            {
-                float randomY = Random.Range(point.bounds.min.y, point.bounds.max.y);
-                currentEnemyPoints.Add(new Vector3(point.transform.position.x, randomY));
-            }
+            float randomY = Random.Range(point.bounds.min.y, point.bounds.max.y);
 
-            else
-            {
-                float randomX = Random.Range(point.bounds.min.x, point.bounds.max.x);
-                currentEnemyPoints.Add(new Vector3(randomX, point.transform.position.y));
-            }
+
+            float randomX = Random.Range(point.bounds.min.x, point.bounds.max.x);
+            currentEnemyPoints.Add(new Vector3(randomX, randomY));
         }
 
         _enemyPoints = currentEnemyPoints;

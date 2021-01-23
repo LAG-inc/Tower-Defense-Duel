@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Lvl1
+  m_EditorClassIdentifier: Assembly-CSharp::LvlRps
+  phasesInLvl: 10
+  basePoints: 250
+  waveFactor: 0.15
+  enemiesAvailableStage1:
+  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}
+  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}
+  enemiesAvailableStage2:
+  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}
+  - {fileID: 11400000, guid: 18534ffa669175244b246f5c71676f24, type: 2}
+  - {fileID: 11400000, guid: de24929d622677c41bca6feb9cbf26fd, type: 2}
+  enemiesAvailableStage3:
+  - {fileID: 11400000, guid: 18534ffa669175244b246f5c71676f24, type: 2}
+  - {fileID: 11400000, guid: de24929d622677c41bca6feb9cbf26fd, type: 2}
+  - {fileID: 11400000, guid: de24929d622677c41bca6feb9cbf26fd, type: 2}
+  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}

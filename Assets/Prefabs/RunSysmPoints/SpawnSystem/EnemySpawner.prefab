@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 678100709836702622}
   - component: {fileID: 678100709836702621}
   - component: {fileID: 2013702262}
+  - component: {fileID: 8513449200056935037}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -44,16 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3e3c16b795122449c2d95c595b4d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patternConfigurator: {fileID: 8513449200056935037}
   spawnRate: 0.2
-  enemies:
-  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}
-  - {fileID: 11400000, guid: 18534ffa669175244b246f5c71676f24, type: 2}
-  - {fileID: 11400000, guid: de24929d622677c41bca6feb9cbf26fd, type: 2}
-  patternPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!61 &2013702262
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -80,3 +73,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.03, y: 0.036920547}
   m_EdgeRadius: 0
+--- !u!114 &8513449200056935037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678100709836702623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9ff40009390f8f43802f62f61af2ec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patternPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
