@@ -9,7 +9,7 @@ public class ThinkingGenerable : Generable
     [HideInInspector] public Bar bar;
     [HideInInspector] public float hitPoints; //Cuando las unidades sufren daño, ellos pierden hitPoints
     [HideInInspector] public float attackRange;
-    [HideInInspector] public float attackRate; //Tiempo entre cada ataque 
+    [HideInInspector] public float attackRate; //Tiempo entre cada ataque
     [HideInInspector] public float lastBlowTime = -1000f;
     [HideInInspector] public float damage;
     [HideInInspector] public int cost;
@@ -18,6 +18,8 @@ public class ThinkingGenerable : Generable
     [HideInInspector] public AudioClip attackAudioClip;
 
     [HideInInspector] public float timeToActNext = 0f;
+
+    [SerializeField] protected SpriteRenderer spriteRenderer;
 
     [Header("Projectile for Ranged")]
     public GameObject projectilePrefab;
@@ -40,7 +42,7 @@ public class ThinkingGenerable : Generable
     public enum AttackType
     {
         Melee,
-        Ranged  
+        Ranged
     }
 
     public virtual void SetTarget(ThinkingGenerable t)

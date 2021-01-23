@@ -26,7 +26,7 @@ public class Unit : ThinkingGenerable
     public void Activate(Faction gFaction, GenerableData gData)
     {
         uType = gData.unityType; //Para identificar la pool
-        GetComponent<SpriteRenderer>().sprite = gData.sprite;
+        spriteRenderer.sprite = gData.sprite;
         creationTime = gData.creationTime;
         deployTime = gData.deployTime;
 
