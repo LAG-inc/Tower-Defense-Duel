@@ -25,6 +25,7 @@ public class ThinkingGenerable : Generable
 
     private Projectile projectile;
     protected AudioSource audioSource;
+    protected Animator animator;
 
     public UnityAction<ThinkingGenerable> OnDealDamage, OnProjectileFired;
 
@@ -41,6 +42,30 @@ public class ThinkingGenerable : Generable
     {
         Melee,
         Ranged  
+    }
+
+    public virtual void Activate(Faction gFaction, GenerableData gData)
+    {
+        GetComponent<SpriteRenderer>().sprite = gData.sprite;
+        creationTime = gData.creationTime;
+        deployTime = gData.deployTime;
+
+        faction = gFaction;
+        hitPoints = gData.hitPoints;
+        targetType = gData.targetType;
+        attackRange = gData.attackRange;
+        attackRate = gData.attackRate;
+        //speed = gData.speed;
+        damage = gData.damagePerAttack;
+
+        cost = gData.cost;
+        dieAudioClip = gData.dieClip;
+
+        attackAudioClip = gData.attackClip;
+
+        state = States.Idle;
+
+        UIManager.SI.AddBar(this);
     }
 
     public virtual void SetTarget(ThinkingGenerable t)
@@ -79,6 +104,9 @@ public class ThinkingGenerable : Generable
 
     public virtual void Seek()
     {
+        if (target == null)
+            return;
+
         state = States.Seeking;
     }
 

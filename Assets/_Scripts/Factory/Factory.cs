@@ -76,26 +76,53 @@ public class Factory : MonoBehaviour
 
     private void SetupGenerable(ref GameObject go, GenerableData gDataRef, Generable.Faction gFaction)
     {
+        
+
         switch (gDataRef.gType)
         {
             case Generable.GenerableType.Unit:
 
-                switch (gDataRef.unityType)
+                switch (gFaction)
                 {
-                    case Unit.UnitType.Robot1:
-                        go = PoolManager.SI.GetRobot1Pool().ExtractFromQueue();
+                    case Generable.Faction.Player:
+
+                        switch (gDataRef.aType)
+                        {
+                            case Allied.AType.Robot1:
+                                go = PoolManager.SI.GetRobot1Pool().ExtractFromQueue();
+                                break;
+                            case Allied.AType.Robot2:
+                                go = PoolManager.SI.GetRobot2Pool().ExtractFromQueue();
+                                break;
+                            case Allied.AType.Robot3:
+                                break;
+                            default:
+                                break;
+                        }
+
                         break;
-                    case Unit.UnitType.Robot2:
-                        go = PoolManager.SI.GetRobot2Pool().ExtractFromQueue();
+                    case Generable.Faction.Opponent:
+
+                        switch (gDataRef.eType)
+                        {
+                            case Enemy.EType.Alien1:
+                                break;
+                            case Enemy.EType.Alien2:
+                                break;
+                            case Enemy.EType.Alien3:
+                                break;
+                            default:
+                                break;
+                        }
+
                         break;
-                    case Unit.UnitType.Robot3:
+                    case Generable.Faction.None:
                         break;
                     default:
-                        go = null;
                         break;
                 }
 
-                Unit uScript = go.GetComponent<Unit>();
+                Allied uScript = go.GetComponent<Allied>();
                 uScript.Activate(gFaction, gDataRef); 
                 uScript.OnDealDamage += OnGenerableDealtDamage;
                 uScript.OnProjectileFired += OnProjectileFired;
@@ -150,36 +177,37 @@ public class Factory : MonoBehaviour
         switch (g.gType)
         {
             case Generable.GenerableType.Unit:
-                Unit u = (Unit)g;
+                Allied u = (Allied)g;
                 //RemovePlaceableFromList(u);
                 u.OnDealDamage -= OnGenerableDealtDamage;
                 u.OnProjectileFired -= OnProjectileFired;
                 UIManager.SI.RemoveBar(u);
-                StartCoroutine(DisposeUnit(u));
+                StartCoroutine(DisposeAllied(u));
                 break;
         }
     }
 
-    private IEnumerator DisposeUnit(Unit g)
+    private IEnumerator DisposeAllied(Allied g)
     {
         //time for animation 
         yield return new WaitForSeconds(0f);
 
         g.gameObject.SetActive(false);
 
-        switch (g.GetUnitType())
+        switch (g.GetAType())
         {
-            case Unit.UnitType.Robot1:
+            case Allied.AType.Robot1:
                 PoolManager.SI.GetRobot1Pool().EnqueueObj(g.gameObject);
                 break;
-            case Unit.UnitType.Robot2:
+            case Allied.AType.Robot2:
                 PoolManager.SI.GetRobot2Pool().EnqueueObj(g.gameObject);
                 break;
-            case Unit.UnitType.Robot3:
+            case Allied.AType.Robot3:
                 break;
             default:
                 break;
         }
+
     }
 
     //No estoy seguro si deberia ir en este script
