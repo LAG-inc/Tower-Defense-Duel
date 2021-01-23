@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/RunPointsSYSTEM/TestMenuLvlSelectio.unity
+    guid: 4f70322d0f8514747ba7f147ee012edc
+  - enabled: 1
+    path: Assets/Scenes/RunPointsSYSTEM/RunPointsSystem.unity
+    guid: 8c5ae129fbb47ca4493bc60453c017cd
   m_configObjects: {}

@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class EnemyBehavior : MonoBehaviour
 {
-    private static float _speed;
+    private float _speed;
 
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
@@ -19,8 +19,6 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField, UnityEngine.Range(5, 20)]
     private float damage;
 
-    [SerializeField, UnityEngine.Range(5, 20)]
-    private float attackeSpeed;
 
     private int _currentTargetIndex;
 
@@ -94,7 +92,7 @@ public class EnemyBehavior : MonoBehaviour
     /// </summary>
     /// <param name="enemyPointsScripts"></param>
     /// <param name="enemyPointsCollider"> Set the instance enemy pattern points</param>
-    public static void SetEnemyPoints(List<EnemyPoint> enemyPointsScripts, List<Collider2D> enemyPointsCollider)
+    public void SetEnemyPoints(List<EnemyPoint> enemyPointsScripts, List<Collider2D> enemyPointsCollider)
     {
         _enemyPointsScripts = enemyPointsScripts;
         _enemyPointsColliders = enemyPointsCollider;
@@ -104,12 +102,6 @@ public class EnemyBehavior : MonoBehaviour
     /// Change the speed of all the enemies
     /// </summary>
     /// <param name="speed"></param>
-    public static void ChangeSpeed(float speed)
-    {
-        _speed = speed;
-    }
-
-
     public void RecieveDamage(float damange)
     {
         life -= damange;
@@ -122,7 +114,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnEnable()
     {
-        AssignEnemyPattern();
+        StartCoroutine(AssignEnemyPattern());
         SetAnimValues();
     }
 
@@ -139,8 +131,9 @@ public class EnemyBehavior : MonoBehaviour
     }
 
 
-    public void SetComponents(float lLife, Sprite sprite, float attackPower, Animator animator)
+    public void SetComponents(float lLife, Sprite sprite, float attackPower, Animator animator, float speed)
     {
+        _speed = speed;
         life = lLife;
         _spriteRenderer.sprite = sprite;
         damage = attackPower;
@@ -154,8 +147,9 @@ public class EnemyBehavior : MonoBehaviour
     }
 
 
-    private void AssignEnemyPattern()
+    private IEnumerator AssignEnemyPattern()
     {
+        yield return new WaitUntil(() => _enemyPoints != null);
         var currentEnemyPoints = new List<Vector3>();
 
 
