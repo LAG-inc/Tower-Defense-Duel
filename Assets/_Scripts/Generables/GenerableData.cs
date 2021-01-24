@@ -28,5 +28,6 @@ public class GenerableData : ScriptableObject
     [Header("Enemies")]
     public Enemy.EType eType;
     public float speed;
+    public int points;
 
 }

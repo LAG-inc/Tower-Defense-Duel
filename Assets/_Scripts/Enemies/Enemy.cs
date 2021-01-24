@@ -10,6 +10,7 @@ public class Enemy : ThinkingGenerable
     [HideInInspector] public float speed;
     private int _currentTargetIndex;
     private Vector3 _target;
+
     //Set true when die animation finish (Machine State) ****
     public bool readyToDeactivate;
 
@@ -19,7 +20,7 @@ public class Enemy : ThinkingGenerable
     private List<Vector3> _enemyPoints = new List<Vector3>();
 
     private static readonly int Attacking = Animator.StringToHash("Attacking");
-
+    
     public enum EType
     {
         Alien1,
@@ -41,16 +42,16 @@ public class Enemy : ThinkingGenerable
     private void Start()
     {
         _currentTargetIndex = 0;
-        _target = _enemyPoints[_currentTargetIndex];
     }
 
     private void Update()
     {
-        if (state == States.Attacking) return;
+        if (_enemyPoints.Count <= 0) return;
 
-        if (Mathf.Abs(transform.position.x - _target.x) < 0.1f &&
-            Mathf.Abs(transform.position.y - _target.y) < 0.1f)
+        if (Mathf.Abs(transform.position.x - _target.x) < 0.2f &&
+            Mathf.Abs(transform.position.y - _target.y) < 0.2f)
         {
+
             ChangeTarget();
         }
     }
@@ -61,6 +62,9 @@ public class Enemy : ThinkingGenerable
 
         _rigidbody.MovePosition(_rigidbody.position +
                                 (Vector2)(_target - transform.position).normalized * (Time.deltaTime * speed));
+
+        //Debug.Log(_enemyPointsScripts.Count, gameObject);
+
     }
 
     public override void Activate(Faction gFaction, GenerableData gData)
@@ -76,9 +80,14 @@ public class Enemy : ThinkingGenerable
     private void ChangeTarget()
     {
         if (_currentTargetIndex == _enemyPoints.Count - 1)
-            StartAttack();
-        else
-            _currentTargetIndex++;
+        {
+            Debug.Log("ATTACK THE BASE!!!!");
+            //replace with Attack base and die
+            Destroy(gameObject);
+            return;
+        }
+
+        _currentTargetIndex++;
 
         _target = _enemyPoints[_currentTargetIndex];
     }
@@ -88,7 +97,7 @@ public class Enemy : ThinkingGenerable
     /// </summary>
     /// <param name="enemyPointsScripts"></param>
     /// <param name="enemyPointsCollider"> Set the instance enemy pattern points</param>
-    public static void SetEnemyPoints(List<EnemyPoint> enemyPointsScripts, List<Collider2D> enemyPointsCollider)
+    public void SetEnemyPoints(List<EnemyPoint> enemyPointsScripts, List<Collider2D> enemyPointsCollider)
     {
         _enemyPointsScripts = enemyPointsScripts;
         _enemyPointsColliders = enemyPointsCollider;
@@ -105,7 +114,7 @@ public class Enemy : ThinkingGenerable
 
     private void OnEnable()
     {
-        AssignEnemyPattern();
+        StartCoroutine(AssignEnemyPattern());
         SetAnimValues();
     }
 
@@ -115,7 +124,7 @@ public class Enemy : ThinkingGenerable
     /// <returns></returns>
     private IEnumerator DieBehavior()
     {
-        yield return new WaitUntil(() => readyToDeactivate); // OnAnimationFinished
+        yield return new WaitUntil(() => readyToDeactivate); // OnAnimationFinished in charge of make it true
         PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
         gameObject.SetActive(false);
     }
@@ -133,25 +142,21 @@ public class Enemy : ThinkingGenerable
         animator.SetBool(Attacking, false);
     }
 
-    private void AssignEnemyPattern()
+    private IEnumerator AssignEnemyPattern()
     {
+
+        yield return new WaitUntil(() => _enemyPointsScripts.Count > 0);
         var currentEnemyPoints = new List<Vector3>();
 
         for (var index = 0; index < _enemyPointsColliders.Count; index++)
         {
             var point = _enemyPointsColliders[index];
-            //TODO actualizar a los ultimos cambios que hizo Ritosan
-            if (_enemyPointsScripts[index].direction == Direction.Vertical)
-            {
-                float randomY = Random.Range(point.bounds.min.y, point.bounds.max.y);
-                currentEnemyPoints.Add(new Vector3(point.transform.position.x, randomY));
-            }
 
-            else
-            {
-                float randomX = Random.Range(point.bounds.min.x, point.bounds.max.x);
-                currentEnemyPoints.Add(new Vector3(randomX, point.transform.position.y));
-            }
+            float randomY = Random.Range(point.bounds.min.y, point.bounds.max.y);
+
+
+            float randomX = Random.Range(point.bounds.min.x, point.bounds.max.x);
+            currentEnemyPoints.Add(new Vector3(randomX, randomY));
         }
 
         _enemyPoints = currentEnemyPoints;

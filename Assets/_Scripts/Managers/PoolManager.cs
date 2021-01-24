@@ -33,7 +33,7 @@ public class PoolManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log("Pools not found");
+            Debug.Log("Pools not found" + e.ToString());
         }
 
         //_alien1Pool.FillQueue();

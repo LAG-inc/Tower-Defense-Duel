@@ -13,7 +13,7 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField, Tooltip("Constant time between enemies in seconds"), Range(0, 5)]
     private float spawnRate;
 
-    private List<EnemyScriptable> _enemies = new List<EnemyScriptable>();
+    private List<GenerableData> _enemies = new List<GenerableData>();
 
     private float _currentSpawnTime;
 
@@ -66,22 +66,37 @@ public class EnemyGenerator : MonoBehaviour
     /// Activate enemy Prefab and assign it properties 
     /// </summary>
     private void ActivateEnemy()
-    {
+    {    
         _countDebug++;
 
         var currentEnemy = Random.Range(0, _enemies.Count);
 
         var enemy = _enemyPool.ExtractFromQueue();
 
+
+        GenerableData eData = _enemies[currentEnemy];
+
+        Enemy eScript = enemy.GetComponent<Enemy>();
+        eScript.Activate(eData.unitFaction, eData);
+
+
+        //TODO estos dos metodos estan duplicados aqui y en Factory, se debe pasar este 
+        //codigo a algun Manager, puede ser un futuro GenerableManager
+        eScript.OnDealDamage += OnGenerableDealtDamage;
+        eScript.OnProjectileFired += OnProjectileFired;
+
+        GameManager.Instance.AddPlaceableToList(eScript);
+
+
         enemy.transform.SetParent(transform);
 
-        var enemyBehavior = enemy.GetComponent<EnemyBehavior>();
+        var enemyBehavior = enemy.GetComponent<Enemy>();
 
         patternConfigurator.SetEnemyPoints(ref enemyBehavior);
 
-        enemyBehavior.SetComponents(_enemies[currentEnemy].life, _enemies[currentEnemy].enemySprite,
-            _enemies[currentEnemy].damage
-            , _enemies[currentEnemy].animator, _enemies[currentEnemy].speed);
+        //enemyBehavior.SetComponents(_enemies[currentEnemy].life, _enemies[currentEnemy].enemySprite,
+        //    _enemies[currentEnemy].damage
+        //    , _enemies[currentEnemy].animator, _enemies[currentEnemy].speed);
 
 
         var randomPos = Random.Range(_spawnZone.bounds.min.x, _spawnZone.bounds.max.x);
@@ -103,7 +118,7 @@ public class EnemyGenerator : MonoBehaviour
     }
 
 
-    public void SetEnemiesAvailable(List<EnemyScriptable> enemyScriptable)
+    public void SetEnemiesAvailable(List<GenerableData> enemyScriptable)
     {
         _enemies = enemyScriptable;
     }
@@ -111,5 +126,33 @@ public class EnemyGenerator : MonoBehaviour
     private void OnDisable()
     {
         RpsManager.SingleInstance.SubtractGenerator(this);
+    }
+
+    private void OnGenerableDealtDamage(ThinkingGenerable g)
+    {
+        if (g.target.state != ThinkingGenerable.States.Dead)
+        {
+            float newHealth = g.target.SufferDamage(g.damage);
+            g.target.bar.SetHealth(newHealth);
+        }
+    }
+
+    private void OnProjectileFired(ThinkingGenerable g)
+    {
+        Vector3 adjTargetPos = g.target.transform.position;
+        Vector3 vectorToTarget = adjTargetPos - g.projectileSpawnPoint.position;
+
+        Quaternion rot = Quaternion.LookRotation(Vector3.forward, vectorToTarget);
+
+        GameObject prj = PoolManager.SI.GetBulletPool().ExtractFromQueue();
+        prj.transform.position = g.projectileSpawnPoint.position;
+        prj.GetComponent<Projectile>().SetInitialPosition(g.projectileSpawnPoint.position);
+        prj.transform.rotation = rot;
+
+        prj.GetComponent<Projectile>().target = g.target;
+        prj.GetComponent<Projectile>().damage = g.damage;
+
+        prj.gameObject.SetActive(true);
+        GameManager.Instance.GetAllProjectiles().Add(prj.GetComponent<Projectile>());
     }
 }

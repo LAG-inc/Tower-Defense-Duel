@@ -7,7 +7,7 @@ public class LvlRps : ScriptableObject
     public int phasesInLvl;
     public float basePoints;
     public float waveFactor;
-    public List<EnemyScriptable> enemiesAvailableStage1 = new List<EnemyScriptable>();
-    public List<EnemyScriptable> enemiesAvailableStage2 = new List<EnemyScriptable>();
-    public List<EnemyScriptable> enemiesAvailableStage3 = new List<EnemyScriptable>();
+    public List<GenerableData> enemiesAvailableStage1 = new List<GenerableData>();
+    public List<GenerableData> enemiesAvailableStage2 = new List<GenerableData>();
+    public List<GenerableData> enemiesAvailableStage3 = new List<GenerableData>();
 }
