@@ -50,6 +50,8 @@ public class Bar : MonoBehaviour
 
     public void SetHealth(float newHP)
     {
+        if (originalHP <= 0) return;
+
         if (isHidden)
         {
             wholeWidget.SetActive(true);

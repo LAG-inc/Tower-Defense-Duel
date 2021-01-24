@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -80,10 +81,12 @@ public class EnemyGenerator : MonoBehaviour
         eScript.Activate(eData.unitFaction, eData);
 
 
-        //TODO estos dos metodos estan duplicados aqui y en Factory, se debe pasar este 
+        //TODO estos tres metodos estan duplicados aqui y en Factory, se debe pasar este 
         //codigo a algun Manager, puede ser un futuro GenerableManager
         eScript.OnDealDamage += OnGenerableDealtDamage;
         eScript.OnProjectileFired += OnProjectileFired;
+        eScript.OnDie += OnGenerableDead;
+
 
         GameManager.Instance.AddPlaceableToList(eScript);
 
@@ -154,5 +157,68 @@ public class EnemyGenerator : MonoBehaviour
 
         prj.gameObject.SetActive(true);
         GameManager.Instance.GetAllProjectiles().Add(prj.GetComponent<Projectile>());
+    }
+
+    private void OnGenerableDead(Generable g)
+    {
+        g.OnDie -= OnGenerableDead; //remove the listener
+
+        switch (g.gType)
+        {
+            case Generable.GenerableType.Unit:
+
+                ThinkingGenerable u = (ThinkingGenerable)g;
+
+                //TODO cambiar al pasar todo esto al GenerableManager
+                GameManager.Instance.RemoveGenerableFromList(u);
+
+                u.OnDealDamage -= OnGenerableDealtDamage;
+                u.OnProjectileFired -= OnProjectileFired;
+                UIManager.SI.RemoveBar(u);
+
+                switch (g.faction)
+                {
+                    case Generable.Faction.Player:
+                        break;
+                    case Generable.Faction.Opponent:
+
+                        //Esta corrutina solo existe en este script
+                        StartCoroutine(DisposeEnemy((Enemy)u));
+
+                        break;
+                    case Generable.Faction.None:
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
+    }
+
+    private IEnumerator DisposeEnemy(Enemy g)
+    {
+        //time for animation 
+        yield return new WaitForSeconds(0f);
+
+        g.gameObject.SetActive(false);
+
+        PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
+
+        //switch (g.GetEType())
+        //{
+        //    case Enemy.EType.Alien1:
+        //        //TODO
+        //        break;
+        //    case Enemy.EType.Alien2:
+        //        //TODO
+        //        break;
+        //    case Enemy.EType.Alien3:
+        //        break;
+        //    case Enemy.EType.None:
+        //        break;
+        //    default:
+        //        break;
+        //}
+
     }
 }

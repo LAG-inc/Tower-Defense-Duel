@@ -193,4 +193,30 @@ public class GameManager : MonoBehaviour
     {
         return allProjectiles;
     }
+
+    public void RemoveGenerableFromList(ThinkingGenerable g)
+    {
+        allThinkingPlaceables.Remove(g);
+
+        if (g.faction == Generable.Faction.Player)
+        {
+            allPlayers.Remove(g);
+
+            if (g.gType == Generable.GenerableType.Unit)
+                playerUnits.Remove(g);
+            
+        }
+        else if (g.faction == Generable.Faction.Opponent)
+        {
+            allOpponents.Remove(g);
+
+            if (g.gType == Generable.GenerableType.Unit)
+                opponentUnits.Remove(g);
+            
+        }
+        else
+        {
+            Debug.LogError("Error in removing a Placeable from one of the player/opponent lists");
+        }
+    }
 }

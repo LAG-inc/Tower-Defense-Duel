@@ -177,12 +177,32 @@ public class Factory : MonoBehaviour
         switch (g.gType)
         {
             case Generable.GenerableType.Unit:
-                Allied u = (Allied)g;
-                //RemovePlaceableFromList(u);
+
+                ThinkingGenerable u = (ThinkingGenerable)g;
+
+                //TODO cambiar al pasar todo esto al GenerableManager
+                GameManager.Instance.RemoveGenerableFromList(u);
+
                 u.OnDealDamage -= OnGenerableDealtDamage;
                 u.OnProjectileFired -= OnProjectileFired;
                 UIManager.SI.RemoveBar(u);
-                StartCoroutine(DisposeAllied(u));
+
+                switch (g.faction)
+                {
+                    case Generable.Faction.Player:
+
+                        //Esta corrutina solo existe en este script
+                        StartCoroutine(DisposeAllied((Allied)u));
+
+                        break;
+                    case Generable.Faction.Opponent:
+
+                        break;
+                    case Generable.Faction.None:
+                        break;
+                    default:
+                        break;
+                }
                 break;
         }
     }

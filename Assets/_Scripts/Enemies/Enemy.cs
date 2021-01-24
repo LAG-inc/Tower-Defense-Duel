@@ -79,17 +79,22 @@ public class Enemy : ThinkingGenerable
     /// </summary>
     private void ChangeTarget()
     {
-        if (_currentTargetIndex == _enemyPoints.Count - 1)
+        if (_currentTargetIndex == _enemyPoints.Count)
         {
             Debug.Log("ATTACK THE BASE!!!!");
             //replace with Attack base and die
-            Destroy(gameObject);
+            //Destroy(gameObject);
+
+            //Mato al enemigo
+            this.bar.SetHealth(this.SufferDamage(this.hitPoints));
+            _currentTargetIndex = 0;
+
             return;
         }
+        _target = _enemyPoints[_currentTargetIndex];
 
         _currentTargetIndex++;
 
-        _target = _enemyPoints[_currentTargetIndex];
     }
 
     /// <summary>
@@ -118,16 +123,16 @@ public class Enemy : ThinkingGenerable
         SetAnimValues();
     }
 
-    /// <summary>
-    /// Coroutine which allows disable the gameobject depending its current animation state
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator DieBehavior()
-    {
-        yield return new WaitUntil(() => readyToDeactivate); // OnAnimationFinished in charge of make it true
-        PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
-        gameObject.SetActive(false);
-    }
+    ///// <summary>
+    ///// Coroutine which allows disable the gameobject depending its current animation state
+    ///// </summary>
+    ///// <returns></returns>
+    //private IEnumerator DieBehavior()
+    //{
+    //    yield return new WaitUntil(() => readyToDeactivate); // OnAnimationFinished in charge of make it true
+    //    PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
+    //    gameObject.SetActive(false);
+    //}
 
     //public void SetComponents(float lLife, Sprite sprite, float attackPower, Animator animator)
     //{
@@ -160,6 +165,7 @@ public class Enemy : ThinkingGenerable
         }
 
         _enemyPoints = currentEnemyPoints;
+        ChangeTarget();
     }
 
     public override void SetTarget(ThinkingGenerable t)
