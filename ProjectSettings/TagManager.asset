@@ -48,7 +48,10 @@ TagManager:
   - name: Grid
     uniqueID: 3271016911
     locked: 0
-  - name: Enemies-Player
+  - name: Factory
+    uniqueID: 3036292263
+    locked: 0
+  - name: Units
     uniqueID: 864064269
     locked: 0
   - name: UI-WorldSpace

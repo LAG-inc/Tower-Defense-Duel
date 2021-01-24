@@ -29,7 +29,8 @@ public class FactoryInteractive : MonoBehaviour
         spriteRenderer.color = Color.white;
         ui.gameObject.SetActive(false);
         FactoryTracker.SetCanPlaceUnit(false);
-        ShowArea(false);
+        FactoryTracker.ShowGrid(false);
+        ShowAreaRange(false);
     }
 
     private void GainFocus()
@@ -37,7 +38,8 @@ public class FactoryInteractive : MonoBehaviour
         FactoryTracker.SetCurrentFactory(factory, this);
         spriteRenderer.color = focusColor;
         ui.gameObject.SetActive(true);
-        ShowArea(true);
+        FactoryTracker.ShowGrid(true);
+        ShowAreaRange(true);
     }
 
     private void GetTilesInArea()
@@ -53,7 +55,7 @@ public class FactoryInteractive : MonoBehaviour
             FactoryTracker.AddActiveTile(tile.collider.GetComponent<Tile>());
     }
 
-    private void ShowArea(bool show)
+    private void ShowAreaRange(bool show)
     {
         GetTilesInArea();
         foreach (Tile tile in FactoryTracker.GetActiveTiles())

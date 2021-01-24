@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class FactoryTracker : MonoBehaviour
 {
+    [Tooltip("Referencia a la Grid de la escena actual")]
+    [SerializeField] private GameObject TileGrid;
+
+    private static GameObject _grid;
     private static Factory _currentFactory;
     private static FactoryInteractive _currentInteractive;
     private static bool _canPlaceUnit;
@@ -15,6 +19,7 @@ public class FactoryTracker : MonoBehaviour
         Tile.OnMouseClick += () => PlaceUnit();
         Tile.OnMouseClick += () => PlaceFactory();
         _activeTiles = new List<Tile>();
+        _grid = TileGrid;
     }
 
     private void PlaceUnit()
@@ -69,7 +74,10 @@ public class FactoryTracker : MonoBehaviour
         _factoryToGenerate = factory;
         _canPlaceFactory = !_canPlaceFactory;
         _currentInteractive?.LoseFocus();
+        ShowGrid(true);
     }
+
+    public static void ShowGrid(bool show) => _grid.SetActive(show);
 
     public static bool CanPlaceUnit()
     {
