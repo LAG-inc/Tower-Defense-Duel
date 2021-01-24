@@ -68,8 +68,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 864064269
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -112,6 +112,7 @@ MonoBehaviour:
   deployTime: 0
   attackAudioClip: {fileID: 0}
   timeToActNext: 0
+  spriteRenderer: {fileID: 7239554493182583068}
   projectilePrefab: {fileID: 7321369020715352307, guid: ea486f5a056b5214ea13846617bd626e,
     type: 3}
   projectileSpawnPoint: {fileID: 3964137824323042674}
