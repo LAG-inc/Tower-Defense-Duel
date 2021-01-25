@@ -33,7 +33,7 @@ public class PoolManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log("Pools not found");
+            Debug.Log("Pools not found" + e.ToString());
         }
 
         //_alien1Pool.FillQueue();
@@ -44,7 +44,6 @@ public class PoolManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-
 
     /// <summary>
     /// Return a object pool by id, so, we can create as many object pools as we want

@@ -67,7 +67,7 @@ public class RpsManager : MonoBehaviour
         if (_currentPhase > _currentLvl.phasesInLvl) return;
 
 
-        var enemiesAvailable = new List<EnemyScriptable>();
+        var enemiesAvailable = new List<GenerableData>();
 
         if (_currentPhase <= _currentStage * _phasesPerStage[_currentStage])
         {

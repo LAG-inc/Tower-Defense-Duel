@@ -20,7 +20,7 @@ public class PatternConfigurator : MonoBehaviour
         }
     }
 
-    public void SetEnemyPoints(ref EnemyBehavior currentEnemy)
+    public void SetEnemyPoints(ref Enemy currentEnemy)
     {
         currentEnemy.SetEnemyPoints(patternPoints, _enemyColliders);
     }

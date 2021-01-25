@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static event EventManager.VoidEvent OnPause;
 
     private List<ThinkingGenerable> playerUnits, opponentUnits;
-    public List<ThinkingGenerable> allPlayers, allOpponents; 
+    private List<ThinkingGenerable> allPlayers, allOpponents; 
     private List<ThinkingGenerable> allThinkingPlaceables;
     private List<Projectile> allProjectiles;
 
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         playerUnits = new List<ThinkingGenerable>();
         opponentUnits = new List<ThinkingGenerable>();
         allPlayers = new List<ThinkingGenerable>();
-        //allOpponents = new List<ThinkingGenerable>(); Se esta arrastrasdo el generable por Unity para hacer la prueba
+        allOpponents = new List<ThinkingGenerable>();
         allThinkingPlaceables = new List<ThinkingGenerable>();
         allProjectiles = new List<Projectile>();
     }
@@ -44,7 +44,11 @@ public class GameManager : MonoBehaviour
                         break;
 
                     bool targetFound = FindClosestInList(p.transform.position, GetAttackList(p.faction, p.targetType), out targetToPass);
-                    if (!targetFound) Debug.LogError("No hay mas targets!"); 
+                    if (!targetFound)
+                    {
+                        Debug.LogWarning("No hay targets!");
+                        continue;
+                    }
                     p.SetTarget(targetToPass);
                     p.Seek();
                     break;
@@ -188,5 +192,31 @@ public class GameManager : MonoBehaviour
     public List<Projectile> GetAllProjectiles()
     {
         return allProjectiles;
+    }
+
+    public void RemoveGenerableFromList(ThinkingGenerable g)
+    {
+        allThinkingPlaceables.Remove(g);
+
+        if (g.faction == Generable.Faction.Player)
+        {
+            allPlayers.Remove(g);
+
+            if (g.gType == Generable.GenerableType.Unit)
+                playerUnits.Remove(g);
+            
+        }
+        else if (g.faction == Generable.Faction.Opponent)
+        {
+            allOpponents.Remove(g);
+
+            if (g.gType == Generable.GenerableType.Unit)
+                opponentUnits.Remove(g);
+            
+        }
+        else
+        {
+            Debug.LogError("Error in removing a Placeable from one of the player/opponent lists");
+        }
     }
 }

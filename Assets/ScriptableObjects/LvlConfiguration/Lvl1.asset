@@ -16,14 +16,14 @@ MonoBehaviour:
   basePoints: 250
   waveFactor: 0.15
   enemiesAvailableStage1:
-  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}
-  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}
+  - {fileID: 11400000, guid: 18d7f40bdb523d041b2829e02e0dccae, type: 2}
+  - {fileID: 11400000, guid: 5710c29290d504440a38787d6cd63e17, type: 2}
   enemiesAvailableStage2:
-  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}
-  - {fileID: 11400000, guid: 18534ffa669175244b246f5c71676f24, type: 2}
-  - {fileID: 11400000, guid: de24929d622677c41bca6feb9cbf26fd, type: 2}
+  - {fileID: 11400000, guid: 18d7f40bdb523d041b2829e02e0dccae, type: 2}
+  - {fileID: 11400000, guid: 5710c29290d504440a38787d6cd63e17, type: 2}
+  - {fileID: 11400000, guid: 5710c29290d504440a38787d6cd63e17, type: 2}
   enemiesAvailableStage3:
-  - {fileID: 11400000, guid: 18534ffa669175244b246f5c71676f24, type: 2}
-  - {fileID: 11400000, guid: de24929d622677c41bca6feb9cbf26fd, type: 2}
-  - {fileID: 11400000, guid: de24929d622677c41bca6feb9cbf26fd, type: 2}
-  - {fileID: 11400000, guid: da4c40273fb92164fb44c28d7c07edd8, type: 2}
+  - {fileID: 11400000, guid: 18d7f40bdb523d041b2829e02e0dccae, type: 2}
+  - {fileID: 11400000, guid: 5710c29290d504440a38787d6cd63e17, type: 2}
+  - {fileID: 11400000, guid: 87504910eb25af648b6100b98d9acf75, type: 2}
+  - {fileID: 11400000, guid: 87504910eb25af648b6100b98d9acf75, type: 2}

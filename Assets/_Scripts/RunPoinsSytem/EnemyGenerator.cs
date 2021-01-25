@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -13,7 +14,7 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField, Tooltip("Constant time between enemies in seconds"), Range(0, 5)]
     private float spawnRate;
 
-    private List<EnemyScriptable> _enemies = new List<EnemyScriptable>();
+    private List<GenerableData> _enemies = new List<GenerableData>();
 
     private float _currentSpawnTime;
 
@@ -66,22 +67,39 @@ public class EnemyGenerator : MonoBehaviour
     /// Activate enemy Prefab and assign it properties 
     /// </summary>
     private void ActivateEnemy()
-    {
+    {    
         _countDebug++;
 
         var currentEnemy = Random.Range(0, _enemies.Count);
 
         var enemy = _enemyPool.ExtractFromQueue();
 
+
+        GenerableData eData = _enemies[currentEnemy];
+
+        Enemy eScript = enemy.GetComponent<Enemy>();
+        eScript.Activate(eData.unitFaction, eData);
+
+
+        //TODO estos tres metodos estan duplicados aqui y en Factory, se debe pasar este 
+        //codigo a algun Manager, puede ser un futuro GenerableManager
+        eScript.OnDealDamage += OnGenerableDealtDamage;
+        eScript.OnProjectileFired += OnProjectileFired;
+        eScript.OnDie += OnGenerableDead;
+
+
+        GameManager.Instance.AddPlaceableToList(eScript);
+
+
         enemy.transform.SetParent(transform);
 
-        var enemyBehavior = enemy.GetComponent<EnemyBehavior>();
+        var enemyBehavior = enemy.GetComponent<Enemy>();
 
         patternConfigurator.SetEnemyPoints(ref enemyBehavior);
 
-        enemyBehavior.SetComponents(_enemies[currentEnemy].life, _enemies[currentEnemy].enemySprite,
-            _enemies[currentEnemy].damage
-            , _enemies[currentEnemy].animator, _enemies[currentEnemy].speed);
+        //enemyBehavior.SetComponents(_enemies[currentEnemy].life, _enemies[currentEnemy].enemySprite,
+        //    _enemies[currentEnemy].damage
+        //    , _enemies[currentEnemy].animator, _enemies[currentEnemy].speed);
 
 
         var randomPos = Random.Range(_spawnZone.bounds.min.x, _spawnZone.bounds.max.x);
@@ -103,7 +121,7 @@ public class EnemyGenerator : MonoBehaviour
     }
 
 
-    public void SetEnemiesAvailable(List<EnemyScriptable> enemyScriptable)
+    public void SetEnemiesAvailable(List<GenerableData> enemyScriptable)
     {
         _enemies = enemyScriptable;
     }
@@ -111,5 +129,96 @@ public class EnemyGenerator : MonoBehaviour
     private void OnDisable()
     {
         RpsManager.SingleInstance.SubtractGenerator(this);
+    }
+
+    private void OnGenerableDealtDamage(ThinkingGenerable g)
+    {
+        if (g.target.state != ThinkingGenerable.States.Dead)
+        {
+            float newHealth = g.target.SufferDamage(g.damage);
+            g.target.bar.SetHealth(newHealth);
+        }
+    }
+
+    private void OnProjectileFired(ThinkingGenerable g)
+    {
+        Vector3 adjTargetPos = g.target.transform.position;
+        Vector3 vectorToTarget = adjTargetPos - g.projectileSpawnPoint.position;
+
+        Quaternion rot = Quaternion.LookRotation(Vector3.forward, vectorToTarget);
+
+        GameObject prj = PoolManager.SI.GetBulletPool().ExtractFromQueue();
+        prj.transform.position = g.projectileSpawnPoint.position;
+        prj.GetComponent<Projectile>().SetInitialPosition(g.projectileSpawnPoint.position);
+        prj.transform.rotation = rot;
+
+        prj.GetComponent<Projectile>().target = g.target;
+        prj.GetComponent<Projectile>().damage = g.damage;
+
+        prj.gameObject.SetActive(true);
+        GameManager.Instance.GetAllProjectiles().Add(prj.GetComponent<Projectile>());
+    }
+
+    private void OnGenerableDead(Generable g)
+    {
+        g.OnDie -= OnGenerableDead; //remove the listener
+
+        switch (g.gType)
+        {
+            case Generable.GenerableType.Unit:
+
+                ThinkingGenerable u = (ThinkingGenerable)g;
+
+                //TODO cambiar al pasar todo esto al GenerableManager
+                GameManager.Instance.RemoveGenerableFromList(u);
+
+                u.OnDealDamage -= OnGenerableDealtDamage;
+                u.OnProjectileFired -= OnProjectileFired;
+                UIManager.SI.RemoveBar(u);
+
+                switch (g.faction)
+                {
+                    case Generable.Faction.Player:
+                        break;
+                    case Generable.Faction.Opponent:
+
+                        //Esta corrutina solo existe en este script
+                        StartCoroutine(DisposeEnemy((Enemy)u));
+
+                        break;
+                    case Generable.Faction.None:
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
+    }
+
+    private IEnumerator DisposeEnemy(Enemy g)
+    {
+        //time for animation 
+        yield return new WaitForSeconds(0f);
+
+        g.gameObject.SetActive(false);
+
+        PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
+
+        //switch (g.GetEType())
+        //{
+        //    case Enemy.EType.Alien1:
+        //        //TODO
+        //        break;
+        //    case Enemy.EType.Alien2:
+        //        //TODO
+        //        break;
+        //    case Enemy.EType.Alien3:
+        //        break;
+        //    case Enemy.EType.None:
+        //        break;
+        //    default:
+        //        break;
+        //}
+
     }
 }
