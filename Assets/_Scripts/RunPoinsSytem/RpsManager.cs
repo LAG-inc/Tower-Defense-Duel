@@ -125,7 +125,7 @@ public class RpsManager : MonoBehaviour
     private void CalculatePhasesPerStage()
     {
         var totalPhases = _currentLvl.phasesInLvl;
-        var basePhaseNum = (int) Math.Ceiling((float) totalPhases / 3);
+        var basePhaseNum = (int) Math.Ceiling((float) totalPhases / _phasesPerStage.Lenght);
         _phasesPerStage[0] = basePhaseNum;
         _phasesPerStage[1] = basePhaseNum * 2;
         _phasesPerStage[2] = _currentLvl.phasesInLvl;
