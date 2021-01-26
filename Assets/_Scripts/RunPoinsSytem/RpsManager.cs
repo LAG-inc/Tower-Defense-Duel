@@ -71,16 +71,15 @@ public class RpsManager : MonoBehaviour
 
         if (_currentPhase >= _phasesPerStage[_currentStage - 1] || _currentPhase == 1)
         {
-            if (_currentPhase >= _phasesPerStage[_currentStage - 1])
-            {
-                _currentStage++;
-            }
-
+        if (_currentPhase == 1)
+        {
+            enemiesAvailable = _currentLvl.enemiesAvailableStage1;
+        }
+        else if(_currentPhase >= _phasesPerStage[_currentStage - 1])
+        {
+            _currentStage++;
             switch (_currentStage)
             {
-                case 1:
-                    enemiesAvailable = _currentLvl.enemiesAvailableStage1;
-                    break;
                 case 2:
                     enemiesAvailable = _currentLvl.enemiesAvailableStage2;
                     break;
@@ -88,6 +87,8 @@ public class RpsManager : MonoBehaviour
                     enemiesAvailable = _currentLvl.enemiesAvailableStage3;
                     break;
             }
+        }
+
         }
 
         _currentPointsPhase = CalculatePhasePoints(_currentPhase);
