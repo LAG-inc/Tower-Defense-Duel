@@ -7,7 +7,7 @@ public class PhaseInitializer : MonoBehaviour
         Debug.Log("Starting Phase");
         RpsManager.SingleInstance.PreparePhase();
         EnemyGenerator.StartGenerating();
-        if (!RpsManager.SingleInstance.IsAnotherPhase())
+        if (!RpsManager.SingleInstance.ThereIsAnotherPhase())
         {
             gameObject.SetActive(false);
         }
