@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ public class GenerableManager : MonoBehaviour
         {
             case Generable.GenerableType.Unit:
 
+                ThinkingGenerable uScript = null;
+
                 switch (gFaction)
                 {
                     case Generable.Faction.Player:
@@ -38,12 +41,17 @@ public class GenerableManager : MonoBehaviour
                                 break;
                         }
 
+                        uScript = go.GetComponent<Allied>();
+
                         break;
                     case Generable.Faction.Opponent:
 
+                        //En este caso como tenemos una sola pool para todos los enemigos todos son type Alien1
+                        //si esto cambia en un futuro hay que acomodarlo
                         switch (gDataRef.eType)
                         {
                             case Enemy.EType.Alien1:
+                                go = PoolManager.SI.GetObjectPool(1).ExtractFromQueue();
                                 break;
                             case Enemy.EType.Alien2:
                                 break;
@@ -53,6 +61,8 @@ public class GenerableManager : MonoBehaviour
                                 break;
                         }
 
+                        uScript = go.GetComponent<Enemy>();
+
                         break;
                     case Generable.Faction.None:
                         break;
@@ -60,12 +70,17 @@ public class GenerableManager : MonoBehaviour
                         break;
                 }
 
-                Allied uScript = go.GetComponent<Allied>();
-                uScript.Activate(gFaction, gDataRef);
-                uScript.OnDealDamage += OnGenerableDealtDamage;
-                uScript.OnProjectileFired += OnProjectileFired;
-                GameManager.Instance.AddPlaceableToList(uScript);
-                //UIManager.AddHealthUI(uScript);
+                try
+                {
+                    uScript.Activate(gFaction, gDataRef);
+                    uScript.OnDealDamage += OnGenerableDealtDamage;
+                    uScript.OnProjectileFired += OnProjectileFired;
+                    GameManager.Instance.AddPlaceableToList(uScript);
+                }
+                catch (NullReferenceException e)
+                {
+                    throw new Exception("Se está intentando crear un Generable sin faccion", e);
+                }
 
                 break;
             case Generable.GenerableType.Resource:
@@ -129,11 +144,12 @@ public class GenerableManager : MonoBehaviour
                 {
                     case Generable.Faction.Player:
 
-                        //Esta corrutina solo existe en este script
                         StartCoroutine(DisposeAllied((Allied)u));
 
                         break;
                     case Generable.Faction.Opponent:
+
+                        StartCoroutine(DisposeEnemy((Enemy)u));
 
                         break;
                     case Generable.Faction.None:
