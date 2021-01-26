@@ -90,8 +90,7 @@ public class GameManager : MonoBehaviour
                 if (currProjectile.target.state != ThinkingGenerable.States.Dead) //el objetivo podría estar muerto ya que este proyectil está volando
                 {
                     float newHP = currProjectile.target.SufferDamage(currProjectile.damage);
-                    //TODO descomentar
-                    //currProjectile.target.bar.SetHealth(newHP);
+                    currProjectile.target.bar.SetHealth(newHP);
                 }
                 currProjectile.gameObject.SetActive(false);
                 PoolManager.SI.GetBulletPool().EnqueueObj(currProjectile.gameObject);
