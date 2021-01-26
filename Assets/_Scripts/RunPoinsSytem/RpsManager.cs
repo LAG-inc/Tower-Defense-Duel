@@ -69,10 +69,25 @@ public class RpsManager : MonoBehaviour
 
         var enemiesAvailable = new List<GenerableData>();
 
-        if (_currentPhase <= _currentStage * _phasesPerStage[_currentStage])
+        
+        if (_currentPhase == 1)
         {
-            enemiesAvailable = _currentStage == 1 ? _currentLvl.enemiesAvailableStage1 :
-                _currentStage == 2 ? _currentLvl.enemiesAvailableStage2 : _currentLvl.enemiesAvailableStage3;
+            enemiesAvailable = _currentLvl.enemiesAvailableStage1;
+        }
+        else if(_currentPhase >= _phasesPerStage[_currentStage - 1])
+        {
+            _currentStage++;
+            switch (_currentStage)
+            {
+                case 2:
+                    enemiesAvailable = _currentLvl.enemiesAvailableStage2;
+                    break;
+                case 3:
+                    enemiesAvailable = _currentLvl.enemiesAvailableStage3;
+                    break;
+            }
+        }
+
         }
 
         _currentPointsPhase = CalculatePhasePoints(_currentPhase);
@@ -110,7 +125,7 @@ public class RpsManager : MonoBehaviour
     private void CalculatePhasesPerStage()
     {
         var totalPhases = _currentLvl.phasesInLvl;
-        var basePhaseNum = (int) Math.Ceiling((float) totalPhases / 3);
+        var basePhaseNum = (int) Math.Ceiling((float) totalPhases / _phasesPerStage.Lenght);
         _phasesPerStage[0] = basePhaseNum;
         _phasesPerStage[1] = basePhaseNum * 2;
         _phasesPerStage[2] = _currentLvl.phasesInLvl;

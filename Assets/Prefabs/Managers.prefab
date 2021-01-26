@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 2836955382029057812}
   - component: {fileID: 2836955382029057803}
   - component: {fileID: 2836955382029057813}
-  - component: {fileID: 2836955382029057814}
-  - component: {fileID: 2836955382029057815}
   - component: {fileID: 1031910437}
   - component: {fileID: 3283627346881164726}
+  - component: {fileID: 674802718}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -60,36 +59,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba851c9d76a1685478f5e3fa82e24007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allPlayers: []
-  allOpponents: []
---- !u!114 &2836955382029057814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2836955382029057802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b7c0d1510092e4da39fe291495a4fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2836955382029057815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2836955382029057802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16c8f0b62944d2c428e80e7ba404bdac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  multiplier: 3
-  test: 1
-  enemiesPerTestPhase: 500
-  speedTest: 0.5
 --- !u!114 &1031910437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,3 +92,16 @@ MonoBehaviour:
   barPrefab: {fileID: 2299034459240315198, guid: 509bcf174b0f3ba4891aa6a98fc548d2,
     type: 3}
   gameOverUI: {fileID: 0}
+--- !u!114 &674802718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836955382029057802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b7c0d1510092e4da39fe291495a4fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TileGrid: {fileID: 0}

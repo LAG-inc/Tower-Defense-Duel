@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Linq;
+using TMPro.Examples;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -29,7 +30,7 @@ public class EnemyGenerator : MonoBehaviour
     private void Awake()
     {
         _canGenerate = false;
-
+        _availablePoints = 0;
         _currentSpawnTime = 0;
 
         _enemyPool = PoolManager.SI.GetObjectPool(1);
@@ -67,7 +68,7 @@ public class EnemyGenerator : MonoBehaviour
     /// Activate enemy Prefab and assign it properties 
     /// </summary>
     private void ActivateEnemy()
-    {    
+    {
         _countDebug++;
 
         var currentEnemy = Random.Range(0, _enemies.Count);
@@ -112,7 +113,7 @@ public class EnemyGenerator : MonoBehaviour
 
     public void SetAvailablePoints(int points)
     {
-        _availablePoints = points;
+        _availablePoints += points;
     }
 
     public static void StartGenerating()
@@ -123,7 +124,10 @@ public class EnemyGenerator : MonoBehaviour
 
     public void SetEnemiesAvailable(List<GenerableData> enemyScriptable)
     {
-        _enemies = enemyScriptable;
+        foreach (var enemy in enemyScriptable.Where(enemy => !_enemies.Contains(enemy)))
+        {
+            _enemies.Add(enemy);
+        }
     }
 
     private void OnDisable()
@@ -167,7 +171,7 @@ public class EnemyGenerator : MonoBehaviour
         {
             case Generable.GenerableType.Unit:
 
-                ThinkingGenerable u = (ThinkingGenerable)g;
+                ThinkingGenerable u = (ThinkingGenerable) g;
 
                 //TODO cambiar al pasar todo esto al GenerableManager
                 GameManager.Instance.RemoveGenerableFromList(u);
@@ -183,7 +187,7 @@ public class EnemyGenerator : MonoBehaviour
                     case Generable.Faction.Opponent:
 
                         //Esta corrutina solo existe en este script
-                        StartCoroutine(DisposeEnemy((Enemy)u));
+                        StartCoroutine(DisposeEnemy((Enemy) u));
 
                         break;
                     case Generable.Faction.None:
@@ -191,6 +195,7 @@ public class EnemyGenerator : MonoBehaviour
                     default:
                         break;
                 }
+
                 break;
         }
     }
@@ -219,6 +224,5 @@ public class EnemyGenerator : MonoBehaviour
         //    default:
         //        break;
         //}
-
     }
 }
