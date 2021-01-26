@@ -48,7 +48,6 @@ public class EnemyGenerator : MonoBehaviour
     {
         if (!_canGenerate)
             return;
-        Debug.Log("YEAHHH I can generate Units!!!");
 
         if (_availablePoints <= 0)
         {
