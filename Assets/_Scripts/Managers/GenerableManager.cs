@@ -7,12 +7,98 @@ public class GenerableManager : MonoBehaviour
 {
     public static GenerableManager Instance;
 
+    private List<ThinkingGenerable> playerUnits, opponentUnits;
+    private List<ThinkingGenerable> allPlayers, allOpponents;
+    private List<ThinkingGenerable> allThinkingPlaceables;
+    private List<Projectile> allProjectiles;
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
         }
+
+        playerUnits = new List<ThinkingGenerable>();
+        opponentUnits = new List<ThinkingGenerable>();
+        allPlayers = new List<ThinkingGenerable>();
+        allOpponents = new List<ThinkingGenerable>();
+        allThinkingPlaceables = new List<ThinkingGenerable>();
+        allProjectiles = new List<Projectile>();
+    }
+
+    private void Update()
+    {
+
+        ThinkingGenerable targetToPass;
+        ThinkingGenerable p;
+
+        for (int pN = 0; pN < allThinkingPlaceables.Count; pN++)
+        {
+            p = allThinkingPlaceables[pN];
+
+            switch (p.state)
+            {
+                case ThinkingGenerable.States.Idle:
+                    if (p.targetType == Generable.GenerableTarget.None)
+                        break;
+
+                    bool targetFound = FindClosestInList(p.transform.position, GetAttackList(p.faction, p.targetType), out targetToPass);
+                    if (!targetFound)
+                    {
+                        Debug.LogWarning("No hay targets!");
+                        continue;
+                    }
+                    p.SetTarget(targetToPass);
+                    p.Seek();
+                    break;
+
+
+                case ThinkingGenerable.States.Seeking:
+                    if (p.IsTargetInRange())
+                    {
+                        p.StartAttack();
+                    }
+                    break;
+
+
+                case ThinkingGenerable.States.Attacking:
+                    if (p.IsTargetInRange())
+                    {
+                        if (Time.time >= p.lastBlowTime + p.attackRate)
+                        {
+                            if (p.attackType == ThinkingGenerable.AttackType.Ranged)
+                            {
+                                p.FireProjectile();
+                            }
+                            p.DealBlow();
+                        }
+                    }
+                    break;
+
+            }
+        }
+
+        Projectile currProjectile;
+        float progressToTarget;
+        for (int prjN = 0; prjN < allProjectiles.Count; prjN++)
+        {
+            currProjectile = allProjectiles[prjN];
+            progressToTarget = currProjectile.Move();
+            if (progressToTarget >= 1f)
+            {
+                //El objetivo podría estar muerto ya que este proyectil está volando
+                if (currProjectile.target.state != ThinkingGenerable.States.Dead) 
+                {
+                    float newHP = currProjectile.target.SufferDamage(currProjectile.damage);
+                    currProjectile.target.bar.SetHealth(newHP);
+                }
+                currProjectile.gameObject.SetActive(false);
+                PoolManager.SI.GetBulletPool().EnqueueObj(currProjectile.gameObject);
+                allProjectiles.RemoveAt(prjN);
+            }
+        }
+
     }
 
     public void SetupGenerable(ref GameObject go, GenerableData gDataRef, Generable.Faction gFaction)
@@ -75,7 +161,7 @@ public class GenerableManager : MonoBehaviour
                     uScript.Activate(gFaction, gDataRef);
                     uScript.OnDealDamage += OnGenerableDealtDamage;
                     uScript.OnProjectileFired += OnProjectileFired;
-                    GameManager.Instance.AddPlaceableToList(uScript);
+                    AddPlaceableToList(uScript);
                 }
                 catch (NullReferenceException e)
                 {
@@ -120,7 +206,7 @@ public class GenerableManager : MonoBehaviour
         prj.GetComponent<Projectile>().damage = g.damage;
 
         prj.gameObject.SetActive(true);
-        GameManager.Instance.GetAllProjectiles().Add(prj.GetComponent<Projectile>());
+        GetAllProjectiles().Add(prj.GetComponent<Projectile>());
     }
 
     private void OnGenerableDead(Generable g)
@@ -133,8 +219,7 @@ public class GenerableManager : MonoBehaviour
 
                 ThinkingGenerable u = (ThinkingGenerable)g;
 
-                //TODO cambiar al pasar todo esto al GenerableManager
-                GameManager.Instance.RemoveGenerableFromList(u);
+                RemoveGenerableFromList(u);
 
                 u.OnDealDamage -= OnGenerableDealtDamage;
                 u.OnProjectileFired -= OnProjectileFired;
@@ -191,23 +276,10 @@ public class GenerableManager : MonoBehaviour
 
         g.gameObject.SetActive(false);
 
+        //En el caso de los enemigos se usa una sola pool, si en el futuro esto llega a cambiar
+        //habria que acomodarlo
         PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
 
-        //switch (g.GetEType())
-        //{
-        //    case Enemy.EType.Alien1:
-        //        //TODO
-        //        break;
-        //    case Enemy.EType.Alien2:
-        //        //TODO
-        //        break;
-        //    case Enemy.EType.Alien3:
-        //        break;
-        //    case Enemy.EType.None:
-        //        break;
-        //    default:
-        //        break;
-        //}
     }
 
     public IEnumerator TimerEnergyAllied(float time, ThinkingGenerable obj)
@@ -218,6 +290,107 @@ public class GenerableManager : MonoBehaviour
             obj.bar.SetHealth(obj.SufferDamage(0.1f));
 
             yield return new WaitForSecondsRealtime(0.1f);
+        }
+    }
+
+    public void AddPlaceableToList(ThinkingGenerable p)
+    {
+        allThinkingPlaceables.Add(p);
+
+        if (p.faction == Generable.Faction.Player)
+        {
+            allPlayers.Add(p);
+
+            if (p.gType == Generable.GenerableType.Unit)
+            {
+                playerUnits.Add(p);
+            }
+            else
+            {
+                //usar cuando tengamos mas tipos de generables
+            }
+        }
+        else if (p.faction == Generable.Faction.Opponent)
+        {
+            allOpponents.Add(p);
+
+            if (p.gType == Generable.GenerableType.Unit)
+            {
+                opponentUnits.Add(p);
+            }
+            else
+            {
+                //usar cuando tengamos mas tipos de generables
+            }
+        }
+        else
+        {
+            Debug.LogError("Error al agregar un Generable a una lista de oponentes/aliados");
+        }
+    }
+
+    private bool FindClosestInList(Vector3 p, List<ThinkingGenerable> list, out ThinkingGenerable t)
+    {
+        t = null;
+        bool targetFound = false;
+        float closestDistanceSqr = Mathf.Infinity;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            float sqrDistance = (p - list[i].transform.position).sqrMagnitude;
+
+            if (sqrDistance < closestDistanceSqr)
+            {
+                t = list[i];
+                closestDistanceSqr = sqrDistance;
+                targetFound = true;
+            }
+        }
+
+        return targetFound;
+    }
+
+    private List<ThinkingGenerable> GetAttackList(Generable.Faction f, Generable.GenerableTarget t)
+    {
+        switch (t)
+        {
+            case Generable.GenerableTarget.Unit:
+                return (f == Generable.Faction.Player) ? allOpponents : allPlayers;
+            case Generable.GenerableTarget.OnlyBuildings:
+            default:
+                Debug.LogError("Que faccion es??");
+                return null;
+        }
+    }
+
+    public List<Projectile> GetAllProjectiles()
+    {
+        return allProjectiles;
+    }
+
+    public void RemoveGenerableFromList(ThinkingGenerable g)
+    {
+        allThinkingPlaceables.Remove(g);
+
+        if (g.faction == Generable.Faction.Player)
+        {
+            allPlayers.Remove(g);
+
+            if (g.gType == Generable.GenerableType.Unit)
+                playerUnits.Remove(g);
+
+        }
+        else if (g.faction == Generable.Faction.Opponent)
+        {
+            allOpponents.Remove(g);
+
+            if (g.gType == Generable.GenerableType.Unit)
+                opponentUnits.Remove(g);
+
+        }
+        else
+        {
+            Debug.LogError("Error in removing a Placeable from one of the player/opponent lists");
         }
     }
 }

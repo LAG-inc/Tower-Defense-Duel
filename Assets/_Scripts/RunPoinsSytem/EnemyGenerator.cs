@@ -83,13 +83,13 @@ public class EnemyGenerator : MonoBehaviour
         var enemyBehavior = enemy.GetComponent<Enemy>();
         patternConfigurator.SetEnemyPoints(ref enemyBehavior);
 
+
         var randomPos = Random.Range(_spawnZone.bounds.min.x, _spawnZone.bounds.max.x);
 
         enemy.transform.position = new Vector3(randomPos, transform.position.y);
 
         _availablePoints -= _enemies[currentEnemy].points;
     }
-
 
     public void SetAvailablePoints(int points)
     {
@@ -100,7 +100,6 @@ public class EnemyGenerator : MonoBehaviour
     {
         _canGenerate = true;
     }
-
 
     public void SetEnemiesAvailable(List<GenerableData> enemyScriptable)
     {
