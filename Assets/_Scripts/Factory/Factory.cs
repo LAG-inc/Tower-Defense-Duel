@@ -34,7 +34,7 @@ public class Factory : MonoBehaviour
         FactoryTracker.SetCanPlaceUnit(true);
     }
 
-    public IEnumerator GenerateUnit(Vector2 location)
+    public IEnumerator GenerateUnit(Tile tile)
     {
         if (!_canGenerateUnit) yield break;
 
@@ -49,7 +49,9 @@ public class Factory : MonoBehaviour
         {
             GenerableData gDataRef = bData.generablesData[i];
             SetupGenerable(ref _unitToGenerate, gDataRef, gDataRef.unitFaction);
-            _unitToGenerate.transform.position = location + bData.relativeOffsets[i];
+            _unitToGenerate.transform.position = (Vector2) tile.transform.position + bData.relativeOffsets[i];
+            // TODO: Tal vez sea necesario cambiar la lógica una vez se apliquen los cambios de Unstoppable7
+            _unitToGenerate.GetComponent<Allied>().AttachedTile = tile;
             _unitToGenerate.SetActive(true);
         }
         _currentNumberUnits += bData.generablesData.Length;
@@ -75,8 +77,6 @@ public class Factory : MonoBehaviour
 
     private void SetupGenerable(ref GameObject go, GenerableData gDataRef, Generable.Faction gFaction)
     {
-        
-
         switch (gDataRef.gType)
         {
             case Generable.GenerableType.Unit:
@@ -122,7 +122,7 @@ public class Factory : MonoBehaviour
                 }
 
                 Allied uScript = go.GetComponent<Allied>();
-                uScript.Activate(gFaction, gDataRef); 
+                uScript.Activate(gFaction, gDataRef);
                 uScript.OnDealDamage += OnGenerableDealtDamage;
                 uScript.OnProjectileFired += OnProjectileFired;
                 GameManager.Instance.AddPlaceableToList(uScript);
@@ -136,9 +136,7 @@ public class Factory : MonoBehaviour
                 go = null;
                 break;
         }
-
         go.GetComponent<Generable>().OnDie += OnGenerableDead;
-
     }
 
     private void OnGenerableDealtDamage(ThinkingGenerable g)

@@ -6660,6 +6660,7 @@ MonoBehaviour:
   deployTime: 0
   attackAudioClip: {fileID: 0}
   timeToActNext: 0
+  spriteRenderer: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpawnPoint: {fileID: 0}
 --- !u!212 &1583542320
@@ -8585,6 +8586,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 674802718, guid: 21e059368f2826548a5bd3c09fc449f6, type: 3}
+      propertyPath: TileGrid
+      value: 
+      objectReference: {fileID: 737458193}
     - target: {fileID: 2836955382029057802, guid: 21e059368f2826548a5bd3c09fc449f6,
         type: 3}
       propertyPath: m_Name

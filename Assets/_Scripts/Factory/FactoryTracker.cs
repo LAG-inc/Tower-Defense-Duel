@@ -33,10 +33,8 @@ public class FactoryTracker : MonoBehaviour
         Tile tile = hit.collider.GetComponent<Tile>();
         if (_activeTiles.Contains(tile))
         {
-            // TODO: pass game object to have the reference
-            //_currentFactory?.GenerateUnit(hit.collider.transform.position);
             if (_currentFactory != null)
-                StartCoroutine(_currentFactory.GenerateUnit(hit.collider.transform.position));
+                StartCoroutine(_currentFactory.GenerateUnit(tile));
             _canPlaceUnit = false;
         }
     }
