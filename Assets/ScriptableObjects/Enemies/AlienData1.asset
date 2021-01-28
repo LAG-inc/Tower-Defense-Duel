@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2617f5d60e2b56418b0482b1d7cc8e2, type: 3}
-  m_Name: EnemyData1
+  m_Name: AlienData1
   m_EditorClassIdentifier: 
   gType: 0
   associatedPrefab: {fileID: 0}

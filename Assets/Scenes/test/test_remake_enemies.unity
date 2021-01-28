@@ -6779,6 +6779,7 @@ MonoBehaviour:
   deployTime: 0
   attackAudioClip: {fileID: 0}
   timeToActNext: 0
+  spriteRenderer: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpawnPoint: {fileID: 0}
 --- !u!212 &1583542320
@@ -8585,6 +8586,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 674802718, guid: 21e059368f2826548a5bd3c09fc449f6, type: 3}
+      propertyPath: TileGrid
+      value: 
+      objectReference: {fileID: 737458193}
     - target: {fileID: 2836955382029057802, guid: 21e059368f2826548a5bd3c09fc449f6,
         type: 3}
       propertyPath: m_Name
@@ -8655,6 +8660,11 @@ PrefabInstance:
       propertyPath: allOpponents.Array.data[0]
       value: 
       objectReference: {fileID: 1583542319}
+    - target: {fileID: 3283627346881164726, guid: 21e059368f2826548a5bd3c09fc449f6,
+        type: 3}
+      propertyPath: gameOverUI
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2836955382029057815, guid: 21e059368f2826548a5bd3c09fc449f6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 21e059368f2826548a5bd3c09fc449f6, type: 3}
