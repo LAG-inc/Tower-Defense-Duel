@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LvlRps
   phasesInLvl: 10
   basePoints: 250
-  waveFactor: 2.5
+  waveFactor: 0.2
   enemiesAvailableStageI:
   - {fileID: 11400000, guid: 1d2e3dbe917c278469ff559972732169, type: 2}
   - {fileID: 11400000, guid: 774b6cb38e46d4c4a80b763e33451b83, type: 2}

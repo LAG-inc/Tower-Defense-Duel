@@ -93,7 +93,7 @@ public class EnemyGenerator : MonoBehaviour
 
     public void SetAvailablePoints(int points)
     {
-        _availablePoints += points;
+        _availablePoints = points;
     }
 
     public static void StartGenerating()

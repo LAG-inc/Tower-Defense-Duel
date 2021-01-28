@@ -22,30 +22,29 @@ public class RpsManager : MonoBehaviour
 
     private int _currentStage;
 
+
+    public Action OnLastPhase;
+
     private void Awake()
     {
+        _enemyGenerators.Clear();
         if (SingleInstance == null)
         {
             SingleInstance = this;
         }
 
         _currentStage = 1;
-        _currentPhase = 1;
-        _enemyGenerators.Clear();
+        _currentPhase = 0;
     }
 
 
     private void Start()
     {
         _currentLvl = LvlHelper.SingleInstance.GetNextLvl();
-        AssignLevelConfiguration();
+        // AssignLevelConfiguration();
         CalculatePhasesPerStage();
     }
 
-    private void AssignLevelConfiguration()
-    {
-        _currentPointsPhase = _currentLvl.basePoints;
-    }
 
     public void AddGenerator(EnemyGenerator newGenerator)
     {
@@ -64,11 +63,12 @@ public class RpsManager : MonoBehaviour
     /// <returns></returns>
     public void PreparePhase()
     {
-        if (_currentPhase > _currentLvl.phasesInLvl) return;
+        _currentPhase++;
 
+        if (_currentPhase >= _currentLvl.phasesInLvl)
+            OnLastPhase.Invoke();
 
         var enemiesAvailable = new List<GenerableData>();
-
 
         if (_currentPhase == 1)
         {
@@ -85,7 +85,6 @@ public class RpsManager : MonoBehaviour
             }
         }
 
-
         _currentPointsPhase += CalculatePhasePoints(_currentPhase);
 
         var pointsPerGenerator = (int) Math.Ceiling((float) _currentPointsPhase / _enemyGenerators.Count);
@@ -95,8 +94,6 @@ public class RpsManager : MonoBehaviour
             enemyGenerator.SetAvailablePoints(pointsPerGenerator);
             enemyGenerator.SetEnemiesAvailable(enemiesAvailable);
         }
-
-        _currentPhase++;
     }
 
     /// <summary>
@@ -105,8 +102,9 @@ public class RpsManager : MonoBehaviour
     private int CalculatePhasePoints(int currentPhase)
     {
         //CurrentPoints + CurrentPhase * WaveFactor + fibonacci(phase/2)
-        var form = _currentPointsPhase + (currentPhase * _currentLvl.waveFactor) +
-                   UtilLag.Fibonacci(currentPhase / 2 + 2);
+        var form = _currentLvl.basePoints + currentPhase * _currentLvl.waveFactor +
+                   UtilLag.Fibonacci(currentPhase / 2);
+
         return (int) Mathf.Ceil(form);
     }
 
@@ -130,11 +128,5 @@ public class RpsManager : MonoBehaviour
             else
                 _phasesPerStage.Add(basePhaseNum * (i + 1));
         }
-    }
-
-
-    public bool ThereIsAnotherPhase()
-    {
-        return _currentPhase != _currentLvl.phasesInLvl;
     }
 }
