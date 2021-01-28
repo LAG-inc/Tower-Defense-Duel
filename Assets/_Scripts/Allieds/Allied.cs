@@ -12,6 +12,8 @@ public class Allied : ThinkingGenerable
         None
     }
 
+    public Tile AttachedTile;
+
     private void Awake()
     {
         gType = GenerableType.Unit;
@@ -67,7 +69,7 @@ public class Allied : ThinkingGenerable
     protected override void Die()
     {
         base.Die();
-
+        AttachedTile.SetIsEmpty(true);
         //animator.SetTrigger("IsDead");
     }
 

@@ -48,7 +48,7 @@ public class ThinkingGenerable : Generable
 
     public virtual void Activate(Faction gFaction, GenerableData gData)
     {
-        GetComponent<SpriteRenderer>().sprite = gData.sprite;
+        spriteRenderer.sprite = gData.sprite;
         creationTime = gData.creationTime;
         deployTime = gData.deployTime;
 

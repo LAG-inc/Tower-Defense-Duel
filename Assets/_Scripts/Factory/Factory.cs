@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,7 +34,7 @@ public class Factory : MonoBehaviour
         FactoryTracker.SetCanPlaceUnit(true);
     }
 
-    public IEnumerator GenerateUnit(Vector2 location)
+    public IEnumerator GenerateUnit(Tile tile)
     {
         if (!_canGenerateUnit) yield break;
 
@@ -74,8 +74,10 @@ public class Factory : MonoBehaviour
         for (int i = 0; i < bData.generablesData.Length; i++)
         {
             GenerableData gDataRef = bData.generablesData[i];
-            GenerableManager.Instance.SetupGenerable(ref _unitToGenerate, gDataRef, gDataRef.unitFaction);
-            _unitToGenerate.transform.position = location + bData.relativeOffsets[i];
+            SetupGenerable(ref _unitToGenerate, gDataRef, gDataRef.unitFaction);
+            _unitToGenerate.transform.position = (Vector2) tile.transform.position + bData.relativeOffsets[i];
+            // TODO: Tal vez sea necesario cambiar la lógica una vez se apliquen los cambios de Unstoppable7
+            _unitToGenerate.GetComponent<Allied>().AttachedTile = tile;
             _unitToGenerate.SetActive(true);
         }
     }

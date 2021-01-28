@@ -72,5 +72,11 @@ public class Tile : MonoBehaviour
             _sprite.color = _showUnavailableColor;
     }
 
+    public void SetIsEmpty(bool empty)
+    {
+        _isEmpty = empty;
+        ChangeState();
+    }
+
     internal void ResetState() => _sprite.color = _initialColor;
 }
