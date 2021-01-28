@@ -89,8 +89,6 @@ public class ThinkingGenerable : Generable
     //Animation event hooks
     public void DealDamage()
     {
-        if (attackType == AttackType.Melee)
-
             //Aqui se pueden reproducir los audios cuando hace daño
 
             if (OnDealDamage != null)
