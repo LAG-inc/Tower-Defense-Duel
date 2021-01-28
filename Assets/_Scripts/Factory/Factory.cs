@@ -46,7 +46,7 @@ public class Factory : MonoBehaviour
         //Si cancela la creacion no se genera la unidad
         if (CancelUnit) yield break;
 
-        DeployAlly(bData, location);
+        DeployAlly(bData, tile);
         
         _currentNumberUnits += bData.generablesData.Length;
         CheckGenerableButtonAvailability();
@@ -69,12 +69,12 @@ public class Factory : MonoBehaviour
         }
     }
 
-    private void DeployAlly(GenerableButtonData bData, Vector2 location)
+    private void DeployAlly(GenerableButtonData bData, Tile tile)
     {
         for (int i = 0; i < bData.generablesData.Length; i++)
         {
             GenerableData gDataRef = bData.generablesData[i];
-            SetupGenerable(ref _unitToGenerate, gDataRef, gDataRef.unitFaction);
+            GenerableManager.Instance.SetupGenerable(ref _unitToGenerate, gDataRef, gDataRef.unitFaction);
             _unitToGenerate.transform.position = (Vector2) tile.transform.position + bData.relativeOffsets[i];
             // TODO: Tal vez sea necesario cambiar la lógica una vez se apliquen los cambios de Unstoppable7
             _unitToGenerate.GetComponent<Allied>().AttachedTile = tile;
