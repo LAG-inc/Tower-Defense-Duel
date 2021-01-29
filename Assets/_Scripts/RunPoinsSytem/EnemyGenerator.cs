@@ -68,13 +68,9 @@ public class EnemyGenerator : MonoBehaviour
 
         var currentEnemy = Random.Range(0, _enemies.Count);
 
-        //var enemy = _enemyPool.ExtractFromQueue();
-        GameObject enemy = new GameObject();
-        //enemy.SetActive(false);
-
         GenerableData eData = _enemies[currentEnemy];
 
-        GenerableManager.Instance.SetupGenerable(ref enemy, eData, eData.unitFaction);
+        GameObject enemy = GenerableManager.Instance.SetupGenerable(eData, eData.unitFaction);
 
         enemy.transform.SetParent(transform);
 

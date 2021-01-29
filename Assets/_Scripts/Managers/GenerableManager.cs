@@ -101,8 +101,9 @@ public class GenerableManager : MonoBehaviour
 
     }
 
-    public void SetupGenerable(ref GameObject go, GenerableData gDataRef, Generable.Faction gFaction)
+    public GameObject SetupGenerable(GenerableData gDataRef, Generable.Faction gFaction)
     {
+        GameObject go = null;
         switch (gDataRef.gType)
         {
             case Generable.GenerableType.Unit:
@@ -121,14 +122,11 @@ public class GenerableManager : MonoBehaviour
                             case Allied.AType.Robot2:
                                 go = PoolManager.SI.GetRobot2Pool().ExtractFromQueue();
                                 break;
-                            case Allied.AType.Robot3:
-                                break;
                             default:
                                 break;
                         }
-
+                        
                         uScript = go.GetComponent<Allied>();
-
                         break;
                     case Generable.Faction.Opponent:
 
@@ -139,16 +137,11 @@ public class GenerableManager : MonoBehaviour
                             case Enemy.EType.Alien1:
                                 go = PoolManager.SI.GetObjectPool(1).ExtractFromQueue();
                                 break;
-                            case Enemy.EType.Alien2:
-                                break;
-                            case Enemy.EType.Alien3:
-                                break;
                             default:
                                 break;
                         }
-
+                        
                         uScript = go.GetComponent<Enemy>();
-
                         break;
                     case Generable.Faction.None:
                         break;
@@ -165,20 +158,24 @@ public class GenerableManager : MonoBehaviour
                 }
                 catch (NullReferenceException e)
                 {
-                    throw new Exception("Se está intentando crear un Generable sin faccion", e);
+                    throw new Exception("Falló el SetupGenerable", e);
                 }
 
                 break;
-            case Generable.GenerableType.Resource:
-                //TODO
-                break;
             default:
-                go = null;
                 break;
         }
 
-        go.GetComponent<Generable>().OnDie += OnGenerableDead;
+        try
+        {
+            go.GetComponent<Generable>().OnDie += OnGenerableDead;
+        }
+        catch (NullReferenceException e)
+        {
+            throw new Exception("Fallo en el SetupGenerable, objeto nulo", e);
+        }
 
+        return go;
     }
 
     private void OnGenerableDealtDamage(ThinkingGenerable g)
@@ -278,7 +275,7 @@ public class GenerableManager : MonoBehaviour
 
         //En el caso de los enemigos se usa una sola pool, si en el futuro esto llega a cambiar
         //habria que acomodarlo
-        PoolManager.SI.GetObjectPool(1).EnqueueObj(gameObject);
+        PoolManager.SI.GetObjectPool(1).EnqueueObj(g.gameObject);
 
     }
 
