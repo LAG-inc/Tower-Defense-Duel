@@ -8,6 +8,7 @@ public class Enemy : ThinkingGenerable
     private EType eType;
     private Rigidbody2D _rigidbody;
     [HideInInspector] public float speed;
+    [HideInInspector] public int points;
     private int _currentTargetIndex;
     private Vector3 _target;
 
@@ -71,6 +72,7 @@ public class Enemy : ThinkingGenerable
     {
         eType = gData.eType;
         speed = gData.speed;
+        points = gData.points;
         base.Activate(gFaction, gData);
     }
 

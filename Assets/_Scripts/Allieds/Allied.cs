@@ -3,6 +3,9 @@
 public class Allied : ThinkingGenerable
 {
     private AType aType;
+    [HideInInspector] public float creationTime;
+    [HideInInspector] public int deployCost;
+    [HideInInspector] public int energyPerAttack;
 
     public enum AType
     {
@@ -25,6 +28,9 @@ public class Allied : ThinkingGenerable
     public override void Activate(Faction gFaction, GenerableData gData)
     {
         aType = gData.aType; //Para identificar la pool
+        creationTime = gData.creationTime;
+        deployCost = gData.deployCost;
+        energyPerAttack = gData.energyPerAttack;
         base.Activate(gFaction, gData);
     }
 

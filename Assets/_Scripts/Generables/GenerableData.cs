@@ -10,11 +10,9 @@ public class GenerableData : ScriptableObject
     public GameObject associatedPrefab;
     public GameObject alternatePrefab;
     public Sprite sprite;
-    [Range(0, 5)] public float creationTime;
     public Generable.Faction unitFaction;
     public ThinkingGenerable.AttackType attackType = ThinkingGenerable.AttackType.Ranged;
     public Generable.GenerableTarget targetType = Generable.GenerableTarget.Unit;
-    [Range(0, 5)] public int cost;
     [Range(0, 100)] public float attackRate = 1f; 
     [Range(0, 5)] public float damagePerAttack = 2f; 
     [Range(10, 30)] public float attackRange = 10f;
@@ -23,7 +21,9 @@ public class GenerableData : ScriptableObject
 
     [Header("Allies")]
     public Allied.AType aType;
-    [Range(0, 5)] public float deployTime;    
+    [Range(0, 5)] public float creationTime;
+    [Range(0, 5)] public int deployCost;
+    [Range(0, 20)] public int energyPerAttack;
 
     [Header("Enemies")]
     public Enemy.EType eType;

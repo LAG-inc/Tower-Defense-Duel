@@ -67,9 +67,22 @@ public class GenerableManager : MonoBehaviour
                     {
                         if (Time.time >= p.lastBlowTime + p.attackRate)
                         {
-                            if (p.attackType == ThinkingGenerable.AttackType.Ranged)
+                            switch (p.faction)
                             {
-                                p.FireProjectile();
+                                case Generable.Faction.Player:
+                                    if (p.attackType == ThinkingGenerable.AttackType.Ranged)
+                                    {
+                                        p.FireProjectile();
+                                        p.bar.SetHealth(p.SufferDamage(((Allied) p).energyPerAttack));
+                                    }
+
+                                    break;
+                                case Generable.Faction.Opponent:
+                                    break;
+                                case Generable.Faction.None:
+                                    break;
+                                default:
+                                    break;
                             }
                             p.DealBlow();
                         }
