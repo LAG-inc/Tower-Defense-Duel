@@ -74,7 +74,7 @@ public class Factory : MonoBehaviour
         for (int i = 0; i < bData.generablesData.Length; i++)
         {
             GenerableData gDataRef = bData.generablesData[i];
-            GenerableManager.Instance.SetupGenerable(ref _unitToGenerate, gDataRef, gDataRef.unitFaction);
+            _unitToGenerate = GenerableManager.Instance.SetupGenerable(gDataRef, gDataRef.unitFaction);
             _unitToGenerate.transform.position = (Vector2) tile.transform.position + bData.relativeOffsets[i];
             // TODO: Tal vez sea necesario cambiar la lógica una vez se apliquen los cambios de Unstoppable7
             _unitToGenerate.GetComponent<Allied>().AttachedTile = tile;
