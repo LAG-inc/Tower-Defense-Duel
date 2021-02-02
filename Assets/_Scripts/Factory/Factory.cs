@@ -53,7 +53,7 @@ public class Factory : MonoBehaviour
         _canGenerateUnit = _currentNumberUnits == maxNumberUnits ? false : true;
 
         //Timer para la 'energia' del aliado
-        yield return StartCoroutine(GenerableManager.Instance.TimerEnergyAllied(bData.generablesData[0].hitPoints, _unitToGenerate.GetComponent<ThinkingGenerable>()));
+        //yield return StartCoroutine(GenerableManager.Instance.TimerEnergyAllied(bData.generablesData[0].hitPoints, _unitToGenerate.GetComponent<ThinkingGenerable>()));
     }
 
     public bool GetCanGenerateUnit() => _canGenerateUnit;
@@ -76,7 +76,6 @@ public class Factory : MonoBehaviour
             GenerableData gDataRef = bData.generablesData[i];
             _unitToGenerate = GenerableManager.Instance.SetupGenerable(gDataRef, gDataRef.unitFaction);
             _unitToGenerate.transform.position = (Vector2) tile.transform.position + bData.relativeOffsets[i];
-            // TODO: Tal vez sea necesario cambiar la lógica una vez se apliquen los cambios de Unstoppable7
             _unitToGenerate.GetComponent<Allied>().AttachedTile = tile;
             _unitToGenerate.SetActive(true);
         }

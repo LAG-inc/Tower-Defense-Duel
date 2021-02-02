@@ -12,9 +12,6 @@ public class ThinkingGenerable : Generable
     [HideInInspector] public float attackRate; //Tiempo entre cada ataque
     [HideInInspector] public float lastBlowTime = -1000f;
     [HideInInspector] public float damage;
-    [HideInInspector] public int cost;
-    [HideInInspector] public float creationTime;
-    [HideInInspector] public float deployTime;
     [HideInInspector] public AudioClip attackAudioClip;
 
     [HideInInspector] public float timeToActNext = 0f;
@@ -49,8 +46,6 @@ public class ThinkingGenerable : Generable
     public virtual void Activate(Faction gFaction, GenerableData gData)
     {
         spriteRenderer.sprite = gData.sprite;
-        creationTime = gData.creationTime;
-        deployTime = gData.deployTime;
 
         faction = gFaction;
         hitPoints = gData.hitPoints;
@@ -60,7 +55,6 @@ public class ThinkingGenerable : Generable
         //speed = gData.speed;
         damage = gData.damagePerAttack;
 
-        cost = gData.cost;
         dieAudioClip = gData.dieClip;
 
         attackAudioClip = gData.attackClip;
