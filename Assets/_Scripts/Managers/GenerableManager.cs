@@ -101,13 +101,13 @@ public class GenerableManager : MonoBehaviour
             if (progressToTarget >= 1f)
             {
                 //El objetivo podría estar muerto ya que este proyectil está volando
-                if (currProjectile.target.state != ThinkingGenerable.States.Dead) 
+                if (currProjectile.target.state != ThinkingGenerable.States.Dead)
                 {
                     float newHP = currProjectile.target.SufferDamage(currProjectile.damage);
                     currProjectile.target.bar.SetHealth(newHP);
                 }
                 currProjectile.gameObject.SetActive(false);
-                PoolManager.SI.GetBulletPool().EnqueueObj(currProjectile.gameObject);
+                PoolManager.SI.GetObjectPool("bullet1").EnqueueObj(currProjectile.gameObject);
                 allProjectiles.RemoveAt(prjN);
             }
         }
@@ -130,15 +130,15 @@ public class GenerableManager : MonoBehaviour
                         switch (gDataRef.aType)
                         {
                             case Allied.AType.Robot1:
-                                go = PoolManager.SI.GetRobot1Pool().ExtractFromQueue();
+                                go = PoolManager.SI.GetObjectPool("ally1").ExtractFromQueue();
                                 break;
                             case Allied.AType.Robot2:
-                                go = PoolManager.SI.GetRobot2Pool().ExtractFromQueue();
+                                go = PoolManager.SI.GetObjectPool("ally2").ExtractFromQueue();
                                 break;
                             default:
                                 break;
                         }
-                        
+
                         uScript = go.GetComponent<Allied>();
                         break;
                     case Generable.Faction.Opponent:
@@ -148,12 +148,12 @@ public class GenerableManager : MonoBehaviour
                         switch (gDataRef.eType)
                         {
                             case Enemy.EType.Alien1:
-                                go = PoolManager.SI.GetObjectPool(1).ExtractFromQueue();
+                                go = PoolManager.SI.GetObjectPool("enemy1").ExtractFromQueue();
                                 break;
                             default:
                                 break;
                         }
-                        
+
                         uScript = go.GetComponent<Enemy>();
                         break;
                     case Generable.Faction.None:
@@ -207,7 +207,7 @@ public class GenerableManager : MonoBehaviour
 
         Quaternion rot = Quaternion.LookRotation(Vector3.forward, vectorToTarget);
 
-        GameObject prj = PoolManager.SI.GetBulletPool().ExtractFromQueue();
+        GameObject prj = PoolManager.SI.GetObjectPool("bullet1").ExtractFromQueue();
         prj.transform.position = g.projectileSpawnPoint.position;
         prj.GetComponent<Projectile>().SetInitialPosition(g.projectileSpawnPoint.position);
         prj.transform.rotation = rot;
@@ -266,10 +266,10 @@ public class GenerableManager : MonoBehaviour
         switch (g.GetAType())
         {
             case Allied.AType.Robot1:
-                PoolManager.SI.GetRobot1Pool().EnqueueObj(g.gameObject);
+                PoolManager.SI.GetObjectPool("ally1").EnqueueObj(g.gameObject);
                 break;
             case Allied.AType.Robot2:
-                PoolManager.SI.GetRobot2Pool().EnqueueObj(g.gameObject);
+                PoolManager.SI.GetObjectPool("ally2").EnqueueObj(g.gameObject);
                 break;
             case Allied.AType.Robot3:
                 break;
@@ -281,15 +281,14 @@ public class GenerableManager : MonoBehaviour
 
     private IEnumerator DisposeEnemy(Enemy g)
     {
-        //time for animation 
+        //time for animation
         yield return new WaitForSeconds(0f);
 
         g.gameObject.SetActive(false);
 
         //En el caso de los enemigos se usa una sola pool, si en el futuro esto llega a cambiar
         //habria que acomodarlo
-        PoolManager.SI.GetObjectPool(1).EnqueueObj(g.gameObject);
-
+        PoolManager.SI.GetObjectPool("enemy1").EnqueueObj(g.gameObject);
     }
 
     public IEnumerator TimerEnergyAllied(float time, ThinkingGenerable obj)

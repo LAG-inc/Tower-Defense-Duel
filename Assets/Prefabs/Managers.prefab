@@ -84,12 +84,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b16ebbe7b4c0ea448bdd769cc4f5a732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _robot1Pool: {fileID: 11400000, guid: 341f081eb01931e4386c6bb6ef32b8e9, type: 2}
-  _robot2Pool: {fileID: 11400000, guid: 8a442668f5187cb40b630022b6965b49, type: 2}
-  _alien1Pool: {fileID: 0}
-  _bulletPool: {fileID: 11400000, guid: 073f8ee7bfd993549b13a63f287864d1, type: 2}
-  objectPools:
-  - {fileID: 11400000, guid: f6ee84c56697be3438a653846d2a40ea, type: 2}
+  ObjectPools:
+  - PoolName: ally1
+    ObjectPool: {fileID: 11400000, guid: 341f081eb01931e4386c6bb6ef32b8e9, type: 2}
+  - PoolName: ally2
+    ObjectPool: {fileID: 11400000, guid: 8a442668f5187cb40b630022b6965b49, type: 2}
+  - PoolName: enemy1
+    ObjectPool: {fileID: 11400000, guid: f6ee84c56697be3438a653846d2a40ea, type: 2}
+  - PoolName: bullet1
+    ObjectPool: {fileID: 11400000, guid: 073f8ee7bfd993549b13a63f287864d1, type: 2}
 --- !u!114 &3283627346881164726
 MonoBehaviour:
   m_ObjectHideFlags: 0
