@@ -74,6 +74,8 @@ public class GenerableManager : MonoBehaviour
                                     {
                                         p.FireProjectile();
                                         p.bar.SetHealth(p.SufferDamage(((Allied) p).energyPerAttack));
+
+                                        p.target.IsDying(p.damage);
                                     }
 
                                     break;
@@ -182,6 +184,7 @@ public class GenerableManager : MonoBehaviour
         try
         {
             go.GetComponent<Generable>().OnDie += OnGenerableDead;
+            go.GetComponent<Generable>().OnDying += OnGenerableDying;
         }
         catch (NullReferenceException e)
         {
@@ -229,8 +232,6 @@ public class GenerableManager : MonoBehaviour
 
                 ThinkingGenerable u = (ThinkingGenerable)g;
 
-                RemoveGenerableFromList(u);
-
                 u.OnDealDamage -= OnGenerableDealtDamage;
                 u.OnProjectileFired -= OnProjectileFired;
                 UIManager.SI.RemoveBar(u);
@@ -252,6 +253,21 @@ public class GenerableManager : MonoBehaviour
                     default:
                         break;
                 }
+                break;
+        }
+    }
+
+    private void OnGenerableDying(Generable g)
+    {
+        g.OnDying -= OnGenerableDying; //remove the listener
+
+        switch (g.gType)
+        {
+            case Generable.GenerableType.Unit:
+
+                ThinkingGenerable u = (ThinkingGenerable)g;
+                RemoveGenerableFromList(u);
+
                 break;
         }
     }

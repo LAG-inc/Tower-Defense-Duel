@@ -219,4 +219,9 @@ public class Enemy : ThinkingGenerable
     {
         return eType;
     }
+
+    protected override void Dying()
+    {
+        base.Dying();
+    }
 }
