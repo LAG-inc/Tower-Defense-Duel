@@ -9,6 +9,7 @@ public class Generable : MonoBehaviour
     [HideInInspector] public AudioClip dieAudioClip;
 
     public UnityAction<Generable> OnDie;
+    public UnityAction<Generable> OnDying;
 
     public enum GenerableType
     {

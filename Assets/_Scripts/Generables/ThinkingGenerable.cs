@@ -8,13 +8,12 @@ public class ThinkingGenerable : Generable
     [HideInInspector] public ThinkingGenerable target;
     [HideInInspector] public Bar bar;
     [HideInInspector] public float hitPoints; //Cuando las unidades sufren daño, ellos pierden hitPoints
+    [HideInInspector] public float dyingPoints; 
     [HideInInspector] public float attackRange;
     [HideInInspector] public float attackRate; //Tiempo entre cada ataque
     [HideInInspector] public float lastBlowTime = -1000f;
     [HideInInspector] public float damage;
     [HideInInspector] public AudioClip attackAudioClip;
-
-    [HideInInspector] public float timeToActNext = 0f;
 
     [SerializeField] protected SpriteRenderer spriteRenderer;
 
@@ -34,6 +33,7 @@ public class ThinkingGenerable : Generable
         Idle,
         Seeking,
         Attacking,
+        Dying,
         Dead
     }
 
@@ -49,6 +49,7 @@ public class ThinkingGenerable : Generable
 
         faction = gFaction;
         hitPoints = gData.hitPoints;
+        dyingPoints = gData.hitPoints;
         targetType = gData.targetType;
         attackRange = gData.attackRange;
         attackRate = gData.attackRate;
@@ -67,7 +68,7 @@ public class ThinkingGenerable : Generable
     public virtual void SetTarget(ThinkingGenerable t)
     {
         target = t;
-        t.OnDie += TargetIsDead;
+        t.OnDying += TargetIsDying;
     }
 
     public virtual void StartAttack()
@@ -104,13 +105,11 @@ public class ThinkingGenerable : Generable
         state = States.Seeking;
     }
 
-    protected void TargetIsDead(Generable p)
+    protected void TargetIsDying(Generable g)
     {
         state = States.Idle;
 
-        target.OnDie -= TargetIsDead;
-
-        timeToActNext = lastBlowTime + attackRate;
+        target.OnDying -= TargetIsDying;
     }
 
     public bool IsTargetInRange()
@@ -132,6 +131,17 @@ public class ThinkingGenerable : Generable
         return hitPoints;
     }
 
+    public void IsDying(float damage)
+    {
+        //Debug.Log("RESTA: " + (hitPoints - damage));
+
+        dyingPoints -= damage;
+        if(dyingPoints <= 0f)
+        {
+            Dying();
+        }
+    }
+
     public virtual void Stop()
     {
         state = States.Idle;
@@ -144,5 +154,12 @@ public class ThinkingGenerable : Generable
 
         if (OnDie != null)
             OnDie(this);
+    }
+
+    protected virtual void Dying()
+    {
+        state = States.Dying;
+        if (OnDying != null)
+            OnDying(this);
     }
 }

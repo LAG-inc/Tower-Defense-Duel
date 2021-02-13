@@ -83,4 +83,9 @@ public class Allied : ThinkingGenerable
     {
         return aType;
     }
+
+    protected override void Dying()
+    {
+        base.Dying();
+    }
 }

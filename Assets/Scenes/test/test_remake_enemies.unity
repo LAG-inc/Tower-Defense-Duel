@@ -4493,6 +4493,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 678100709836702621, guid: aea922d04a062c042b02dd8bb2753d73,
+        type: 3}
+      propertyPath: spawnRate
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 678100709836702622, guid: aea922d04a062c042b02dd8bb2753d73,
         type: 3}
       propertyPath: m_RootOrder
@@ -5262,6 +5267,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 678100709836702621, guid: aea922d04a062c042b02dd8bb2753d73,
+        type: 3}
+      propertyPath: spawnRate
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 678100709836702622, guid: aea922d04a062c042b02dd8bb2753d73,
         type: 3}
       propertyPath: m_RootOrder
@@ -6770,18 +6780,19 @@ MonoBehaviour:
   target: {fileID: 0}
   bar: {fileID: 0}
   hitPoints: 0
+  dyingPoints: 0
   attackRange: 0
   attackRate: 0
   lastBlowTime: -1000
   damage: 0
-  cost: 0
-  creationTime: 0
-  deployTime: 0
   attackAudioClip: {fileID: 0}
-  timeToActNext: 0
   spriteRenderer: {fileID: 0}
   projectilePrefab: {fileID: 0}
   projectileSpawnPoint: {fileID: 0}
+  creationTime: 0
+  deployCost: 0
+  energyPerAttack: 0
+  AttachedTile: {fileID: 0}
 --- !u!212 &1583542320
 SpriteRenderer:
   m_ObjectHideFlags: 0
