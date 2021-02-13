@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d3cd7f5fa11254da4b343001118628, type: 3}
   m_Name: Robot1Pool
   m_EditorClassIdentifier: 
-  id: 0
+  poolName: Ally1
   prefab: {fileID: 1214812135869692055, guid: 447bc6bea672d604784046a4d5e83ba6, type: 3}
   amount: 5

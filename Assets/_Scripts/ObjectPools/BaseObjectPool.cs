@@ -4,55 +4,49 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GenericPool 1", menuName = "Custom/Pool/BasePool")]
 public class BaseObjectPool : ScriptableObject
 {
-    protected Queue<GameObject> _objects = new Queue<GameObject>();
-
-    public int id;
-
+    [SerializeField] internal string poolName;
     //Prefab which contains all components of the object to instance
     [SerializeField] protected GameObject prefab;
-
     [SerializeField] protected int amount;
+
+    protected Queue<GameObject> _objects = new Queue<GameObject>();
 
     /// <summary>
     /// Instance a game object and make changes in itself
     /// </summary>
     /// <returns>The game object instanced</returns>
-    protected virtual GameObject CreateObj(bool customIns = true)
+    protected virtual GameObject CreateObj()
     {
-        if (customIns)
-        {
-            var obj = Instantiate(prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Pool").transform);
-            obj.SetActive(false);
-            return obj;
-        }
-        else
-        {
-            var obj = Instantiate(prefab);
-            obj.SetActive(false);
-            return obj;
-        }
+        var obj = Instantiate(
+            prefab,
+            Vector3.zero,
+            Quaternion.identity,
+            PoolManager.SI.PoolGroup?.transform
+        );
+        obj.SetActive(false);
+        return obj;
     }
 
     /// <summary>
-    /// Fill the  queue
+    /// Fill the queue
     /// </summary>
-    public void FillQueue(bool custom = true)
+    public void FillQueue()
     {
         for (var i = 0; i < amount; i++)
         {
-            EnqueueObj(CreateObj(custom));
+            EnqueueObj(CreateObj());
         }
     }
 
     /// <summary>
-    /// Return an object of the pool, if the pool is almost empty is filled again
+    /// Extract an GameObject from the pool, if the pool is almost empty is filled again
     /// </summary>
-    /// <returns></returns>
+    /// <returns>GameObject</returns>
     public GameObject ExtractFromQueue()
     {
         if (_objects.Count < 4)
         {
-            FillQueue(false);
+            FillQueue();
         }
 
         var obj = _objects.Dequeue();
@@ -61,11 +55,8 @@ public class BaseObjectPool : ScriptableObject
     }
 
     /// <summary>
-    /// Return and obj to the que
+    /// Adds and GameObject to the queue
     /// </summary>
     /// <param name="gameObject"></param>
-    public void EnqueueObj(GameObject gameObject)
-    {
-        _objects.Enqueue(gameObject);
-    }
+    public void EnqueueObj(GameObject gameObject) => _objects.Enqueue(gameObject);
 }

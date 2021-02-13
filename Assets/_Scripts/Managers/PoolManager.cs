@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class PoolManager : MonoBehaviour
 {
     public static PoolManager SI;
 
-    [Header("Allies")] [SerializeField] private BaseObjectPool _robot1Pool;
-    [SerializeField] private BaseObjectPool _robot2Pool;
+    [SerializeField] private List<BaseObjectPool> ObjectPools;
 
-    [Header("Enemies")] [SerializeField] private BaseObjectPool _alien1Pool;
-
-    [Header("Common Objects")] [SerializeField]
-    private BaseObjectPool _bulletPool;
-
-
-    [SerializeField] private List<BaseObjectPool> objectPools = new List<BaseObjectPool>();
+    internal GameObject PoolGroup { get; private set; }
+    private Dictionary<string, BaseObjectPool> _objectPoolsDic = new Dictionary<string, BaseObjectPool>();
 
     private void Awake()
     {
@@ -24,55 +17,48 @@ public class PoolManager : MonoBehaviour
         {
             SI = this;
         }
-
-        try
-        {
-            _robot1Pool.FillQueue();
-            _robot2Pool.FillQueue();
-            _bulletPool.FillQueue();
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Pools not found" + e.ToString());
-        }
-
-        //_alien1Pool.FillQueue();
-        foreach (var pool in objectPools)
-        {
-            pool.FillQueue(false);
-        }
     }
 
-    // Start is called before the first frame update
+    private void Start()
+    {
+        PoolGroup = GameObject.Find("Pool");
+
+        foreach (BaseObjectPool pool in ObjectPools)
+            _objectPoolsDic.Add(pool.poolName.ToLower(), pool);
+
+        InitializeQueues();
+    }
+
+    private void InitializeQueues()
+    {
+        foreach (BaseObjectPool pool in _objectPoolsDic.Values)
+        {
+            try
+            {
+                pool.FillQueue();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Object pool not found: " + e.ToString());
+            }
+        }
+    }
 
     /// <summary>
-    /// Return a object pool by id, so, we can create as many object pools as we want
+    /// Return a object pool by name, so, we can create as many object pools as we want
     /// </summary>
-    /// <param name="poolId"></param>
-    /// <returns></returns>
-    public BaseObjectPool GetObjectPool(int poolId)
+    /// <param name="poolName">Name of the ObjectPool to get</param>
+    /// <returns>BaseObjectPool</returns>
+    public BaseObjectPool GetObjectPool(string poolName)
     {
-        foreach (var pool in objectPools.Where(pool => pool.id == poolId))
+        try
         {
-            return pool;
+            return _objectPoolsDic[poolName];
         }
-
-        Debug.LogWarning($"{poolId} not found, returned an empty object pool");
-        return ScriptableObject.CreateInstance<BaseObjectPool>();
-    }
-
-    public BaseObjectPool GetRobot1Pool()
-    {
-        return _robot1Pool;
-    }
-
-    public BaseObjectPool GetRobot2Pool()
-    {
-        return _robot2Pool;
-    }
-
-    public BaseObjectPool GetBulletPool()
-    {
-        return _bulletPool;
+        catch (Exception)
+        {
+            Debug.LogWarning($"Pool {poolName} not found, returned an empty object pool instead.");
+            return ScriptableObject.CreateInstance<BaseObjectPool>();
+        }
     }
 }
