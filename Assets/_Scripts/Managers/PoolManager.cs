@@ -6,17 +6,10 @@ public class PoolManager : MonoBehaviour
 {
     public static PoolManager SI;
 
-    [Serializable]
-    internal struct PoolItem
-    {
-        [Tooltip("Name of the object pool (to refer in scripts)")]
-        [SerializeField] internal string PoolName;
-        [Tooltip("Object pool Prefab")]
-        [SerializeField] internal BaseObjectPool ObjectPool;
-    };
-    [SerializeField] private List<PoolItem> ObjectPools = new List<PoolItem>();
+    [SerializeField] private List<BaseObjectPool> ObjectPools;
 
-    private Dictionary<string, BaseObjectPool> _objectPools = new Dictionary<string, BaseObjectPool>();
+    internal GameObject PoolGroup { get; private set; }
+    private Dictionary<string, BaseObjectPool> _objectPoolsDic = new Dictionary<string, BaseObjectPool>();
 
     private void Awake()
     {
@@ -28,10 +21,17 @@ public class PoolManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (PoolItem pool in ObjectPools)
-            _objectPools.Add(pool.PoolName.ToLower(), pool.ObjectPool);
+        PoolGroup = GameObject.Find("Pool");
 
-        foreach (BaseObjectPool pool in _objectPools.Values)
+        foreach (BaseObjectPool pool in ObjectPools)
+            _objectPoolsDic.Add(pool.poolName.ToLower(), pool);
+
+        InitializeQueues();
+    }
+
+    private void InitializeQueues()
+    {
+        foreach (BaseObjectPool pool in _objectPoolsDic.Values)
         {
             try
             {
@@ -53,11 +53,11 @@ public class PoolManager : MonoBehaviour
     {
         try
         {
-            return _objectPools[poolName];
+            return _objectPoolsDic[poolName];
         }
         catch (Exception)
         {
-            Debug.LogWarning($"{poolName} not found, returned an empty object pool instead.");
+            Debug.LogWarning($"Pool {poolName} not found, returned an empty object pool instead.");
             return ScriptableObject.CreateInstance<BaseObjectPool>();
         }
     }

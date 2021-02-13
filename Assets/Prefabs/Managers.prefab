@@ -85,14 +85,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectPools:
-  - PoolName: ally1
-    ObjectPool: {fileID: 11400000, guid: 341f081eb01931e4386c6bb6ef32b8e9, type: 2}
-  - PoolName: ally2
-    ObjectPool: {fileID: 11400000, guid: 8a442668f5187cb40b630022b6965b49, type: 2}
-  - PoolName: enemy1
-    ObjectPool: {fileID: 11400000, guid: f6ee84c56697be3438a653846d2a40ea, type: 2}
-  - PoolName: bullet1
-    ObjectPool: {fileID: 11400000, guid: 073f8ee7bfd993549b13a63f287864d1, type: 2}
+  - {fileID: 11400000, guid: 073f8ee7bfd993549b13a63f287864d1, type: 2}
+  - {fileID: 11400000, guid: f6ee84c56697be3438a653846d2a40ea, type: 2}
+  - {fileID: 11400000, guid: 341f081eb01931e4386c6bb6ef32b8e9, type: 2}
+  - {fileID: 11400000, guid: 8a442668f5187cb40b630022b6965b49, type: 2}
 --- !u!114 &3283627346881164726
 MonoBehaviour:
   m_ObjectHideFlags: 0
